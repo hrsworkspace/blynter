@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Work Sans", sans-serif !important;
+}
+
+.containers {
+  @apply xll:max-w-[1778px]! xl:max-w-[1398px] mx-auto px-4 w-full;
+}
+
+.animate-pulse { 
+  animation: pulse 2s cubic-bezier(.4, 0, .2, 1) infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
