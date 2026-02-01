@@ -139,7 +139,7 @@ const BlogDetailPage = ({ category, blogDetails, relatedArticles = [] }) => {
           )}
 
           {/* Content Section */}
-          <article className="max-w-5xl mx-auto px-4 py-12">
+          <article className="max-w-4xl mx-auto px-4 py-12">
             {/* Header for non-hero layout */}
             {!imageUrl && (
               <header className="mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">

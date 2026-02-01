@@ -134,7 +134,7 @@ const HomePage = ({ blogPosts }) => {
             </section>
           ) : (
             <section
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 xll:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-6"
               aria-label="Blog posts">
               {blogPosts?.map((blog) => {
                 const title = blog?.heroTitle || "";

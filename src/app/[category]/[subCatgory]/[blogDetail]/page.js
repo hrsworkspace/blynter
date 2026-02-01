@@ -11,6 +11,7 @@ export const revalidate = false;
 export async function generateMetadata({ params }) {
   const { category, subCatgory, blogDetail } = await params;
   const blogDetails = await getBlogDetailsData(blogDetail);
+  console.log("blogDetails", blogDetails)
   
   return {
     title: blogDetails?.metaTitle || "",
