@@ -13,6 +13,7 @@ module.exports = {
         white: "#ffffff",
         light_blue: "#0099ff",
         dark_blue: "#0000ff",
+        "header-color": "#3b82f6", // Update this to match your header color
       },
       fontFamily: {
         sans: ["Work Sans", "sans-serif"],

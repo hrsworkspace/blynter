@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { ThemeProvider } from "../contexts/ThemeProvider";
 import Script from "next/script";
 import ClickSpark from "@/components/ClickSpark";
+import ScrollToTopButton from "@/components/ScrollToTopButton"; // Import the ScrollToTopButton component
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,7 +43,7 @@ export default function RootLayout({ children }) {
       >
         <ThemeProvider>
           <ClickSpark
-            sparkColor='#3b82f6'
+            sparkColor="#3b82f6"
             sparkSize={10}
             sparkRadius={15}
             sparkCount={8}
@@ -50,17 +51,13 @@ export default function RootLayout({ children }) {
           >
             <div className="flex flex-col min-h-screen">
               <Header />
-              <div className="flex-grow">
-                {children}
-              </div>
+              <div className="flex-grow">{children}</div>
               <Footer />
+              <ScrollToTopButton /> {/* Add the ScrollToTopButton here */}
             </div>
           </ClickSpark>
         </ThemeProvider>
       </body>
-      {/* <amp-auto-ads type="adsense"
-        data-ad-client="ca-pub-2234384779164146">
-      </amp-auto-ads> */}
     </html>
   );
 }

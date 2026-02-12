@@ -25,3 +25,15 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.bg-header-color {
+  background-color: var(--header-bg-color);
+}
+
+button.fixed {
+  z-index: 50;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

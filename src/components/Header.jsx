@@ -5,6 +5,8 @@ import { useTheme } from "../contexts/ThemeProvider";
 import { motion, useScroll } from "motion/react";
 import { HiOutlineMoon } from "react-icons/hi";
 import { LuSun } from "react-icons/lu";
+import Logo from "../assets/main_logo.png"
+import Image from "next/image";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -106,10 +108,10 @@ export default function Header() {
           <div className="flex-shrink-0">
             <Link
               href="/"
-              className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-500 transition-colors duration-200"
+              className="text-2xl md:text-3xl font-bold text-gray-900 dark̀:text-gray-100 hover:text-blue-600 dark:hover:text-blue-500 transition-colors duration-200"
               onClick={closeMenu}
               aria-label="Home">
-              {/* Blog */}
+              <Image src={Logo} alt="logo" height={25} width={25} />
             </Link>
           </div>
 
