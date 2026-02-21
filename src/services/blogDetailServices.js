@@ -3,7 +3,7 @@ import { fetchGraphQL } from "./contentful";
 export async function getBlogDetails({ slug, preview = true, lng = "en-US" }) {
   const blogDetailsData = await fetchGraphQL(
     `query {
-      harshalCollection(where: { slug: "${slug}" }, preview: ${preview ? "true" : "false"}, limit: 1, locale: "${lng}") {
+      blynterCollection(where: { slug: "${slug}" }, preview: ${preview ? "true" : "false"}, limit: 1) {
         items {
             _id
             heroTitle
@@ -36,5 +36,5 @@ export async function getBlogDetails({ slug, preview = true, lng = "en-US" }) {
 }`,
     preview
   );
-  return blogDetailsData?.data?.harshalCollection?.items[0];
+  return blogDetailsData?.data?.blynterCollection?.items[0];
 }

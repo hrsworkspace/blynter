@@ -4,7 +4,7 @@ import { textToSlug } from "@/helper/helper";
 export async function getAllBlogPosts({ preview = true, lng = "en-US" }) {
     const entriesData = await fetchGraphQL(
       `query {
-        harshalCollection(locale: "${lng}") {
+        blynterCollection{
           items {
             _id
             heroTitle
@@ -26,7 +26,7 @@ export async function getAllBlogPosts({ preview = true, lng = "en-US" }) {
       }`,
       preview
     );
-    return entriesData?.data?.harshalCollection?.items;
+    return entriesData?.data?.blynterCollection?.items;
   }
 
 export async function getBlogsBySubCatgory({ subCatgory, excludeSlug, limit = 3, preview = true, lng = "en-US" }) {

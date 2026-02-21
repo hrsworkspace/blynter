@@ -32,8 +32,8 @@ export default async function Home({ searchParams }) {
   }
   const language = lng || "en-US";
   
-  console.log('[SERVER - ROOT] searchParams:', JSON.stringify(searchParams));
-  console.log('[SERVER - ROOT] Final language:', language);
+  // console.log('[SERVER - ROOT] searchParams:', JSON.stringify(searchParams));
+  // console.log('[SERVER - ROOT] Final language:', language);
   
   const blogPosts = await getAllBlogPostsData(language);
 
