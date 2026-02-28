@@ -15,12 +15,50 @@ export async function getBlogDetails({ slug, preview = true, lng = "en-US" }) {
             heroImage {
               url
             }
+              faqs
             publishedBy
             heroDescription {
                 json
                         links {
-          assets {
-            block {
+            assets {
+              block {
+              sys { id }
+              url
+              title
+              description
+              contentType
+            }
+          }
+        }
+          
+
+            }
+        }
+    }
+}`,
+    preview
+  );
+  const blynterTopTrendingdata = await fetchGraphQL( 
+    `query {
+      blynterTopTrendingCollection(where: { slug: "${slug}" }, preview: ${preview ? "true" : "false"}, limit: 1) {
+        items {
+            _id
+            heroTitle
+            metaTitle
+            metaDescription
+            metaKeywords
+            category
+            subCatgory
+            heroImage {
+              url
+            }
+              faqs
+            publishedBy
+            heroDescription {
+                json
+                        links {
+            assets {
+              block {
               sys { id }
               url
               title
@@ -34,7 +72,16 @@ export async function getBlogDetails({ slug, preview = true, lng = "en-US" }) {
         }
     }
 }`,
-    preview
-  );
-  return blogDetailsData?.data?.blynterCollection?.items[0];
-}
+preview
+  )
+  const blogItem =
+  blogDetailsData?.data?.blynterCollection?.items?.[0] || {};
+
+const trendingItem =
+  blynterTopTrendingdata?.data?.blynterTopTrendingCollection?.items?.[0] || {};
+
+// Merge both objects correctly
+return {
+  ...blogItem,
+  ...trendingItem,
+};}

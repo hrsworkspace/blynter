@@ -1,17 +1,21 @@
 "use client";
-import { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { textToSlug } from '@/helper/helper';
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { textToSlug } from "@/helper/helper";
 
-const NewsCarousel = ({ blogPosts, autoSlideInterval = 5000, transitionDuration = 800 }) => {
+const NewsCarousel = ({
+  tredingBlogs,
+  autoSlideInterval = 5000,
+  transitionDuration = 800,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const intervalRef = useRef(null);
 
   // Get the first 5 posts for the carousel (latest/highlighted)
-  const carouselPosts = blogPosts?.slice(0, 5) || [];
+  const carouselPosts =  tredingBlogs?.slice(0, 5) || [];
 
   // Auto-slide functionality
   useEffect(() => {
@@ -32,7 +36,13 @@ const NewsCarousel = ({ blogPosts, autoSlideInterval = 5000, transitionDuration 
         clearInterval(intervalRef.current);
       }
     };
-  }, [carouselPosts.length, autoSlideInterval, isPaused, isTransitioning, transitionDuration]);
+  }, [
+    carouselPosts.length,
+    autoSlideInterval,
+    isPaused,
+    isTransitioning,
+    transitionDuration,
+  ]);
 
   const goToSlide = (index) => {
     if (index === currentIndex || isTransitioning) return;
@@ -48,7 +58,7 @@ const NewsCarousel = ({ blogPosts, autoSlideInterval = 5000, transitionDuration 
   const goToPrevious = () => {
     if (isTransitioning) return;
     setIsTransitioning(true);
-    setCurrentIndex((prevIndex) => 
+    setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? carouselPosts.length - 1 : prevIndex - 1
     );
     setTimeout(() => {
@@ -87,7 +97,7 @@ const NewsCarousel = ({ blogPosts, autoSlideInterval = 5000, transitionDuration 
   if (carouselPosts.length === 0) return null;
 
   return (
-    <div 
+    <div
       className="relative w-full mb-6 sm:mb-8 md:mb-10 rounded-lg overflow-hidden shadow-lg dark:shadow-gray-900"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
@@ -95,11 +105,13 @@ const NewsCarousel = ({ blogPosts, autoSlideInterval = 5000, transitionDuration 
       {/* Carousel Container */}
       <div className="relative h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] w-full  overflow-hidden">
         {/* Slides Container */}
-        <div 
+        <div
           className="flex h-full transition-transform ease-in-out"
           style={{
             transform: `translateX(-${currentIndex * 100}%)`,
-            transitionDuration: `${transitionDuration}ms`,
+            transition: isTransitioning
+              ? `transform ${transitionDuration}ms ease-in-out`
+              : "none",
           }}
         >
           {carouselPosts.map((post, index) => {
@@ -135,33 +147,33 @@ const NewsCarousel = ({ blogPosts, autoSlideInterval = 5000, transitionDuration 
                       priority={index === 0}
                     />
                   )}
-                  
+
                   {/* Overlay Gradient */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                  
+
                   {/* Content */}
                   <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 lg:p-10 text-white">
                     {/* Category Badge */}
                     {subCatgory && (
                       <div className="mb-3 sm:mb-4">
-                        <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-white/30">
+                        <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs  font-semibold px-2 py-1 sm:px-2 sm:py-1 rounded-full border border-white/30">
                           {subCatgory}
                         </span>
                       </div>
                     )}
-                    
+
                     {/* Title */}
-                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 line-clamp-2 sm:line-clamp-3">
+                    <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3 line-clamp-2 sm:line-clamp-3">
                       {title}
                     </h2>
-                    
+
                     {/* Description */}
                     {description && (
                       <p className="text-sm sm:text-base md:text-lg text-white/90 line-clamp-2 sm:line-clamp-3 mb-4 sm:mb-6">
                         {description}
                       </p>
                     )}
-                    
+
                     {/* Read More */}
                     <div className="flex items-center text-white font-semibold text-sm sm:text-base group hover:text-blue-400 dark:hover:text-blue-400 transition-colors duration-200">
                       <span>Read More</span>
@@ -249,8 +261,8 @@ const NewsCarousel = ({ blogPosts, autoSlideInterval = 5000, transitionDuration 
               }}
               className={`h-2 sm:h-2.5 w-2 sm:w-2.5 rounded-full transition-all duration-300 ${
                 index === currentIndex
-                  ? 'bg-white w-6 sm:w-8'
-                  : 'bg-white/50 hover:bg-white/75'
+                  ? "bg-white w-6 sm:w-8"
+                  : "bg-white/50 hover:bg-white/75"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />
@@ -262,4 +274,3 @@ const NewsCarousel = ({ blogPosts, autoSlideInterval = 5000, transitionDuration 
 };
 
 export default NewsCarousel;
-

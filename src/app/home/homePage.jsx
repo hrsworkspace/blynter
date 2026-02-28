@@ -39,8 +39,7 @@ const BlogSkeleton = () => {
   );
 };
 
-const HomePage = ({ blogPosts }) => {
-  console.log('blogPosts',blogPosts)
+const HomePage = ({ blogPosts, tredingBlogs }) => {
   useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -102,22 +101,24 @@ const HomePage = ({ blogPosts }) => {
       <div className="w-full max-w-[1920px] mx-auto grid grid-cols-12 gap-4 sm:gap-6 md:gap-8">
         {/* Left Sidebar - Hidden on screens smaller than xl */}
         <div className="max-xl:hidden col-span-2">
-          <GoogleAds />
+          {/* <GoogleAds /> */}
         </div>
 
         {/* Main Content Area */}
         <div className="col-span-12 xl:col-span-8 relative max-w-[1200px] mx-auto xl:mx-0">
-          <header className="mb-6 sm:mb-8 md:mb-10 text-center">
-   
+          <header className="mb-2 sm:mb-4 md:mb-6 text-start text-black dark:text-white text-2xl sm:text-3xl md:text-4xl font-bold">
+              Top Treding
           </header>
 
           {/* News Carousel - Latest/Highlighted Posts */}
           {blogPosts && blogPosts.length > 0 && (
             <div className="mb-6 sm:mb-8 md:mb-10">
-              <NewsCarousel blogPosts={blogPosts} autoSlideInterval={5000} />
+              <NewsCarousel tredingBlogs={tredingBlogs} autoSlideInterval={5000} />
             </div>
           )}
-
+          <div className="py-4 text-start text-black dark:text-white text-lg sm:text-xl md:text-2xl font-bold">
+              More For You
+          </div>
           {false ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-6">
               {[...Array(6)].map((_, index) => (
@@ -133,6 +134,7 @@ const HomePage = ({ blogPosts }) => {
               </p>
             </section>
           ) : (
+            
             <section
               className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 xll:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-6"
               aria-label="Blog posts">
@@ -169,7 +171,7 @@ const HomePage = ({ blogPosts }) => {
                           />
                           {subCatgory && (
                             <div className="absolute top-2 left-2 sm:top-3 sm:left-3 md:top-4 md:left-4">
-                              <span className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-800 dark:text-gray-200 text-xs font-semibold px-2 py-1 sm:px-3 sm:py-1 rounded-full">
+                              <span className="bg-white/90 dark:bg-gray-800/90 border dark:border-white/30 border-black/30 backdrop-blur-sm text-gray-800 dark:text-gray-200 text-xs font-semibold px-2 py-1 sm:px-3 sm:py-1 rounded-full">
                                 {subCatgory}
                               </span>
                             </div>
@@ -177,9 +179,9 @@ const HomePage = ({ blogPosts }) => {
                         </div>
                       )}
                       <div className="p-2 sm:p-3 md:p-4 flex-1 flex flex-col">
-                        <h2 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
+                        <h1 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
                           {title}
-                        </h2>
+                        </h1>
                         {description && (
                           <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 sm:mb-3 line-clamp-3 flex-1">
                             {description}
@@ -215,7 +217,7 @@ const HomePage = ({ blogPosts }) => {
 
       {/* Google Ads Component */}
       <div className="w-full mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-        <GoogleAds />
+        {/* <GoogleAds /> */}
       </div>
     </main>
   );

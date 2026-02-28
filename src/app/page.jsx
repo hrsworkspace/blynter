@@ -1,4 +1,4 @@
-import { getAllBlogPosts } from "@/services/blogServices";
+import { getAllBlogPosts, getAllBlynterTredingBlogPosts } from "@/services/blogServices";
 import HomePage from "./home/homePage";
 
 // Allow dynamic rendering to access searchParams
@@ -8,6 +8,18 @@ export const revalidate = false;
 const getAllBlogPostsData = async (lng) => {
   try {
     const posts = await getAllBlogPosts({ preview: true, lng });
+    if (posts && Array.isArray(posts)) {
+      return posts;
+    }
+  } catch (error) {
+    console.error("Error fetching blog posts:", error);
+    return [];
+  }
+};
+
+const getAllBlynterTredingBlogPostsData = async (lng) => {
+  try {
+    const posts = await getAllBlynterTredingBlogPosts({ preview: true, lng });
     if (posts && Array.isArray(posts)) {
       return posts;
     }
@@ -36,6 +48,7 @@ export default async function Home({ searchParams }) {
   // console.log('[SERVER - ROOT] Final language:', language);
   
   const blogPosts = await getAllBlogPostsData(language);
+  const tredingBlogs = await getAllBlynterTredingBlogPostsData(language);
 
-  return <HomePage blogPosts={blogPosts} />;
+  return <HomePage blogPosts={blogPosts} tredingBlogs={tredingBlogs}/>;
 }

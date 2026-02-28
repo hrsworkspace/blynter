@@ -5,8 +5,36 @@ import { useTheme } from "../contexts/ThemeProvider";
 import { motion, useScroll } from "motion/react";
 import { HiOutlineMoon } from "react-icons/hi";
 import { LuSun } from "react-icons/lu";
-import Logo from "../assets/main_logo.png"
+import Logo from "../assets/main_logo.png";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
+
+const headerCategory = [
+  {
+    name: "Sports",
+    href: "",
+    sub: [
+      { name: "Cricket", href: "/sports/cricket" },
+      { name: "Football", href: "/sports/football" },
+    ],
+  },
+  {
+    name: "Entertainment",
+    href: "",
+    sub: [
+      { name: "Bollywood", href: "/entertainment/bollywood" },
+      { name: "Hollywood", href: "/entertainment/hollywood" },
+    ],
+  },
+  // {
+  //   name: "Technology",
+  //   href: "/technology",
+  // },
+  // {
+  //   name: "Business",
+  //   href: "/business",
+  // },
+];
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -81,7 +109,8 @@ export default function Header() {
           className="w-5 h-5"
           fill="none"
           stroke="currentColor"
-          viewBox="0 0 24 24">
+          viewBox="0 0 24 24"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -99,10 +128,12 @@ export default function Header() {
         isScrolled
           ? "bg-light_blue/70 dark:bg-gray-950/70 backdrop-blur-md shadow-lg border-b border-gray-200/20 dark:border-gray-700/20"
           : "bg-light_blue dark:bg-gray-950"
-      }`}>
+      }`}
+    >
       <nav
         className="w-full mx-auto px-4 sm:px-6 lg:px-8"
-        aria-label="Main navigation">
+        aria-label="Main navigation"
+      >
         <div className="flex items-center justify-between h-14 md:h-16">
           {/* Logo/Brand */}
           <div className="flex-shrink-0">
@@ -110,180 +141,111 @@ export default function Header() {
               href="/"
               className="text-2xl md:text-3xl font-bold text-gray-900 dark̀:text-gray-100 hover:text-blue-600 dark:hover:text-blue-500 transition-colors duration-200"
               onClick={closeMenu}
-              aria-label="Home">
+              aria-label="Home"
+            >
               <Image src={Logo} alt="logo" height={25} width={25} />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <ul className="hidden md:flex md:items-center md:space-x-8 list-none">
-            <li>
-              <Link
-                href="/"
-                className="text-gray hover:text-blue-600 dark:hover:text-blue-500 font-medium transition-colors duration-200 px-3 py-2">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/"
-                className="text-gray hover:text-blue-600 dark:hover:text-blue-500 font-medium transition-colors duration-200 px-3 py-2">
-                Blog
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/"
-                className="text-gray hover:text-blue-600 dark:hover:text-blue-500 font-medium transition-colors duration-200 px-3 py-2">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/"
-                className="text-gray hover:text-blue-600 dark:hover:text-blue-500 font-medium transition-colors duration-200 px-3 py-2">
-                Contact
-              </Link>
-            </li>
+          <nav className="hidden md:block">
+            <ul className="flex items-center gap-4">
+              {headerCategory?.map((item) => (
+                <li key={item.name} className="relative group">
+                  {/* Main Category */}
+                  <Link
+                    href={item.href ? item.href : "#"}
+                    className="
+                      flex items-center gap-1
+                      px-3 py-1.5
+                      rounded-full
+                      border border-black dark:border-gray-700
+                      bg-white dark:bg-gray-900
+                      text-black dark:text-gray-300
+                      font-bold text-sm
+                      hover:bg-gray-100 dark:hover:bg-gray-800
+                      hover:border-gray-400 dark:hover:border-gray-600
+                      hover:text-gray-900 dark:hover:text-white
+                      transition-all duration-300
+                    "
+                  >
+                    {item.name}
 
-            {/* Theme Toggle */}
-            <li className="relative" ref={themeDropdownDesktopRef}>
-              <button
-                onClick={() => {
-                  if (theme === "light") {
-                    setTheme("dark");
-                  } else {
-                    setTheme("light");
-                  }
-                }}
-                className={`flex items-center justify-center p-2 rounded-full border-2 border-orange-400 dark:border-blue-600 transition-colors duration-200 ${
-                  theme === "light"
-                    ? "text-orange-400 bg-orange-50 hover:bg-orange-100"
-                    : "text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-800"
-                }`}
-                aria-label="Theme selector">
-                {getThemeIcon()}
-              </button>
+                    {item.sub && (
+                      <ChevronDown
+                        className="
+                        w-4 h-4
+                        transition-transform duration-300
+                        group-hover:rotate-180
+                      "
+                      />
+                    )}
+                  </Link>
 
-              {/* {isThemeDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                  <div className="py-1" role="menu">
-                    <button
-                      onClick={() => {
-                        setTheme("light");
-                        setIsThemeDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center space-x-2 ${
-                        theme === "light"
-                          ? "bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-500"
-                          : "text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-                      } transition-colors duration-200`}
-                      role="menuitem">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                        />
-                      </svg>
-                      <span>Light</span>
-                      {theme === "light" && (
-                        <svg
-                          className="w-4 h-4 ml-auto"
-                          fill="currentColor"
-                          viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => {
-                        setTheme("dark");
-                        setIsThemeDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center space-x-2 ${
-                        theme === "dark"
-                          ? "bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-500"
-                          : "text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-                      } transition-colors duration-200`}
-                      role="menuitem">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                        />
-                      </svg>
-                      <span>Dark</span>
-                      {theme === "dark" && (
-                        <svg
-                          className="w-4 h-4 ml-auto"
-                          fill="currentColor"
-                          viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => {
-                        setTheme("system");
-                        setIsThemeDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center space-x-2 ${
-                        theme === "system"
-                          ? "bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-500"
-                          : "text-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-                      } transition-colors duration-200`}
-                      role="menuitem">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                        />
-                      </svg>
-                      <span>System</span>
-                      {theme === "system" && (
-                        <svg
-                          className="w-4 h-4 ml-auto"
-                          fill="currentColor"
-                          viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              )} */}
-            </li>
-          </ul>
+                  {/* Dropdown */}
+                  {/* Dropdown */}
+                  {item?.sub && (
+                    <div
+                      className="
+      absolute left-1/2 top-full mt-3
+      -translate-x-1/2
+      w-max
+      bg-white dark:bg-gray-900
+      font-bold
+      rounded-xl shadow-xl
+      border border-black dark:border-gray-800
+      opacity-0 invisible
+      translate-y-2
+      group-hover:opacity-100
+      group-hover:visible
+      group-hover:translate-y-0
+      transition-all duration-300
+      z-50
+    "
+                    >
+                      <ul className="py-3">
+                        {item?.sub?.map((subItem) => (
+                          <li key={subItem.name}>
+                            <Link
+                              href={subItem.href}
+                              className="
+              block px-4 py-1.5 text-sm
+              text-gray-600 dark:text-gray-300
+              hover:bg-blue-50 dark:hover:bg-gray-800
+              hover:text-blue-600 dark:hover:text-blue-400
+              transition-all duration-200
+            "
+                            >
+                              {subItem.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </li>
+              ))}
+              <li className="relative" ref={themeDropdownDesktopRef}>
+                <button
+                  onClick={() => {
+                    if (theme === "light") {
+                      setTheme("dark");
+                    } else {
+                      setTheme("light");
+                    }
+                  }}
+                  className={`flex items-center justify-center p-2 rounded-full border-2 border-orange-400 dark:border-blue-600 transition-colors duration-200 ${
+                    theme === "light"
+                      ? "text-orange-400 bg-orange-50 hover:bg-orange-100"
+                      : "text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  }`}
+                  aria-label="Theme selector"
+                >
+                  {getThemeIcon()}
+                </button>
+              </li>
+            </ul>
+          </nav>
 
           {/* Mobile menu button and theme selector */}
           <div className="md:hidden flex items-center space-x-2">
@@ -302,7 +264,8 @@ export default function Header() {
                     ? "text-orange-400 bg-orange-50 hover:bg-orange-100"
                     : "text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-800"
                 }`}
-                aria-label="Theme selector">
+                aria-label="Theme selector"
+              >
                 {getThemeIcon()}
               </button>
 
@@ -430,14 +393,16 @@ export default function Header() {
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
               aria-expanded={isMenuOpen}
               aria-label="Toggle menu"
-              aria-controls="mobile-menu">
+              aria-controls="mobile-menu"
+            >
               {isMenuOpen ? (
                 <svg
                   className="block h-6 w-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke="currentColor">
+                  stroke="currentColor"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -451,7 +416,8 @@ export default function Header() {
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke="currentColor">
+                  stroke="currentColor"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -472,13 +438,15 @@ export default function Header() {
               ? "max-h-96 opacity-100"
               : "max-h-0 opacity-0 overflow-hidden"
           }`}
-          aria-label="Mobile navigation menu">
+          aria-label="Mobile navigation menu"
+        >
           <ul className="px-2 pt-2 pb-4 space-y-1 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 list-none">
             <li>
               <Link
                 href="/"
                 className="block px-3 py-2 text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md font-medium transition-colors duration-200"
-                onClick={closeMenu}>
+                onClick={closeMenu}
+              >
                 Home
               </Link>
             </li>
@@ -486,7 +454,8 @@ export default function Header() {
               <Link
                 href="/"
                 className="block px-3 py-2 text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md font-medium transition-colors duration-200"
-                onClick={closeMenu}>
+                onClick={closeMenu}
+              >
                 Blog
               </Link>
             </li>
@@ -494,7 +463,8 @@ export default function Header() {
               <Link
                 href="/"
                 className="block px-3 py-2 text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md font-medium transition-colors duration-200"
-                onClick={closeMenu}>
+                onClick={closeMenu}
+              >
                 About
               </Link>
             </li>
@@ -502,7 +472,8 @@ export default function Header() {
               <Link
                 href="/"
                 className="block px-3 py-2 text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md font-medium transition-colors duration-200"
-                onClick={closeMenu}>
+                onClick={closeMenu}
+              >
                 Contact
               </Link>
             </li>

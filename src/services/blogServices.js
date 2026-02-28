@@ -21,12 +21,42 @@ export async function getAllBlogPosts({ preview = true, lng = "en-US" }) {
             heroDescription {
               json
             }
+            faqs
           }
         }
       }`,
       preview
     );
     return entriesData?.data?.blynterCollection?.items;
+  }
+
+  export async function getAllBlynterTredingBlogPosts({ preview = true, lng = "en-US" }) {
+    const entriesData = await fetchGraphQL(
+      `query {
+        blynterTopTrendingCollection{
+          items {
+            _id
+            heroTitle
+            slug
+            metaTitle
+            metaDescription
+            metaKeywords
+            category
+            subCatgory
+            heroImage {
+              url
+            }
+            publishedBy
+            heroDescription {
+              json
+            }
+            faqs
+          }
+        }
+      }`,
+      preview
+    );
+    return entriesData?.data?.blynterTopTrendingCollection?.items;
   }
 
 export async function getBlogsBySubCatgory({ subCatgory, excludeSlug, limit = 3, preview = true, lng = "en-US" }) {
