@@ -42,7 +42,7 @@ export default function Header() {
   const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const themeDropdownDesktopRef = useRef(null);
-  const themeDropdownMobileRef = useRef(null);~
+  const themeDropdownMobileRef = useRef(null);
   const { theme, setTheme } = useTheme();
   const { scrollYProgress } = useScroll();
   console.log("theme", theme);
