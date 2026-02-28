@@ -42,7 +42,7 @@ export default function Header() {
   const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const themeDropdownDesktopRef = useRef(null);
-  const themeDropdownMobileRef = useRef(null);
+  const themeDropdownMobileRef = useRef(null);~
   const { theme, setTheme } = useTheme();
   const { scrollYProgress } = useScroll();
   console.log("theme", theme);
@@ -148,60 +148,90 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:block">
+          <div className="hidden md:block">
             <ul className="flex items-center gap-4">
               {headerCategory?.map((item) => (
                 <li key={item.name} className="relative group">
                   {/* Main Category */}
-                  <Link
-                    href={item.href ? item.href : "#"}
-                    className="
-                      flex items-center gap-1
-                      px-3 py-1.5
-                      rounded-full
-                      border border-black dark:border-gray-700
-                      bg-white dark:bg-gray-900
-                      text-black dark:text-gray-300
-                      font-bold text-sm
-                      hover:bg-gray-100 dark:hover:bg-gray-800
-                      hover:border-gray-400 dark:hover:border-gray-600
-                      hover:text-gray-900 dark:hover:text-white
-                      transition-all duration-300
-                    "
-                  >
-                    {item.name}
-
-                    {item.sub && (
-                      <ChevronDown
-                        className="
-                        w-4 h-4
-                        transition-transform duration-300
-                        group-hover:rotate-180
+                  {item.href ? (
+                    <Link
+                      href={item?.sub?.length === 0 ? item.href : "#"}
+                      className="
+                        flex items-center gap-1
+                        px-3 py-1.5
+                        rounded-full
+                        border border-black dark:border-gray-700
+                        bg-white dark:bg-gray-900
+                        text-black dark:text-gray-300
+                        font-bold text-sm
+                        hover:bg-gray-100 dark:hover:bg-gray-800
+                        hover:border-gray-400 dark:hover:border-gray-600
+                        hover:text-gray-900 dark:hover:text-white
+                        transition-all duration-300
                       "
-                      />
-                    )}
-                  </Link>
+                    >
+                      {item.name}
+
+                      {item.sub && (
+                        <ChevronDown
+                          className="
+                            w-4 h-4
+                            transition-transform duration-300
+                            group-hover:rotate-180
+                          "
+                        />
+                      )}
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      className="
+                        flex items-center gap-1
+                        px-3 py-1.5
+                        rounded-full
+                        border border-black dark:border-gray-700
+                        bg-white dark:bg-gray-900
+                        text-black dark:text-gray-300
+                        font-bold text-sm
+                        hover:bg-gray-100 dark:hover:bg-gray-800
+                        hover:border-gray-400 dark:hover:border-gray-600
+                        hover:text-gray-900 dark:hover:text-white
+                        transition-all duration-300
+                      "
+                    >
+                      {item.name}
+                      {item.sub && (
+                        <ChevronDown
+                          className="
+                            w-4 h-4
+                            transition-transform duration-300
+                            group-hover:rotate-180
+                          "
+                        />
+                      )}
+                    </button>
+                  )}
 
                   {/* Dropdown */}
                   {/* Dropdown */}
                   {item?.sub && (
                     <div
                       className="
-      absolute left-1/2 top-full mt-3
-      -translate-x-1/2
-      w-max
-      bg-white dark:bg-gray-900
-      font-bold
-      rounded-xl shadow-xl
-      border border-black dark:border-gray-800
-      opacity-0 invisible
-      translate-y-2
-      group-hover:opacity-100
-      group-hover:visible
-      group-hover:translate-y-0
-      transition-all duration-300
-      z-50
-    "
+              absolute left-1/2 top-full mt-3
+              -translate-x-1/2
+              w-max
+              bg-white dark:bg-gray-900
+              font-bold
+              rounded-xl shadow-xl
+              border border-black dark:border-gray-800
+              opacity-0 invisible
+              translate-y-2
+              group-hover:opacity-100
+              group-hover:visible
+              group-hover:translate-y-0
+              transition-all duration-300
+              z-50
+            "
                     >
                       <ul className="py-3">
                         {item?.sub?.map((subItem) => (
@@ -245,7 +275,7 @@ export default function Header() {
                 </button>
               </li>
             </ul>
-          </nav>
+          </div>
 
           {/* Mobile menu button and theme selector */}
           <div className="md:hidden flex items-center space-x-2">
