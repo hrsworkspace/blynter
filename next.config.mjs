@@ -1,11 +1,24 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
   reactCompiler: true,
-  // Enable static export for offline functionality
+
   images: {
-    domains: ['images.ctfassets.net'],
+    domains: ["images.ctfassets.net"],
     unoptimized: true, // Required for static export
+  },
+
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "index, follow",
+          },
+        ],
+      },
+    ];
   },
 };
 

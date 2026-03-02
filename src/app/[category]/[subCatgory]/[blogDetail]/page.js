@@ -17,6 +17,20 @@ export async function generateMetadata({ params }) {
     title: blogDetails?.metaTitle || "",
     description: blogDetails?.metaDescription || "",
     keywords: blogDetails?.metaKeywords || "",
+    robots: {
+      index: true,        // true = index, false = noindex
+      follow: true,       // true = follow, false = nofollow
+      nocache: false,
+      googleBot: {
+        index: true,
+        follow: true,
+        noimageindex: false,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+
     alternates: {
       canonical: `${process.env.NEXT_PUBLIC_BASE_URL}/${category}/${subCatgory}/${blogDetails?.slug}`,
 
@@ -24,9 +38,10 @@ export async function generateMetadata({ params }) {
     openGraph: {
       type: "website",
       locale: "en_US",
-      site_name: "p3jets",
+      site_name: "blynter",
       images: [blogDetails?.heroImage?.url || ""],
     },
+    publisher: "blynter"
   };
 }
 

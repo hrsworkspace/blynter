@@ -7,6 +7,7 @@ export async function getBlogDetails({ slug, preview = true, lng = "en-US" }) {
         items {
             _id
             heroTitle
+            slug
             metaTitle
             metaDescription
             metaKeywords
@@ -44,6 +45,7 @@ export async function getBlogDetails({ slug, preview = true, lng = "en-US" }) {
         items {
             _id
             heroTitle
+            slug
             metaTitle
             metaDescription
             metaKeywords

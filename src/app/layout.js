@@ -20,7 +20,34 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Blynter | Sports Stories, Movie Reviews & Entertainment",
   description: "From thrilling sports moments to honest movie reviews, Blynter covers stories that entertain and excite true fans.",
+  keywords: ["sports stories", "movie reviews", "entertainment news", "sports analysis", "film critiques", "celebrity gossip", "sports highlights", "box office updates", "TV show recaps", "pop culture trends"],
+  robots: {
+    index: true,        // true = index, false = noindex
+    follow: true,       // true = follow, false = nofollow
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_BASE_URL}`,
+
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    site_name: "blynter",
+    // images: [blogDetails?.heroImage?.url || ""],
+  },
+  publisher: "blynter"
 };
+
 
 export default function RootLayout({ children }) {
   return (
