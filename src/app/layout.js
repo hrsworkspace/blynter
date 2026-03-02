@@ -64,6 +64,7 @@ export default function RootLayout({ children }) {
           async
           custom-element="amp-auto-ads"
         />
+        <Script src="https://analytics.ahrefs.com/analytics.js" data-key="lGsIe0B6PtK7JYQEDfc0sw" async />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
