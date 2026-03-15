@@ -126,8 +126,8 @@ export default function Header() {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-500 ${
         isScrolled
-          ? "bg-light_blue/70 dark:bg-gray-950/70 backdrop-blur-md shadow-lg border-b border-gray-200/20 dark:border-gray-700/20"
-          : "bg-light_blue dark:bg-gray-950"
+          ? "bg-stone-700 dark:bg-gray-950/70 backdrop-blur-md shadow-lg border-b border-gray-200/20 dark:border-gray-700/20"
+          : "bg-stone-700 dark:bg-gray-950"
       }`}
     >
       <nav
@@ -143,7 +143,7 @@ export default function Header() {
               onClick={closeMenu}
               aria-label="Home"
             >
-              <Image src={Logo} alt="logo" height={25} width={25} />
+              <Image src={Logo} alt="logo" height={150} width={150} />
             </Link>
           </div>
 
