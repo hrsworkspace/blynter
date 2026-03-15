@@ -107,7 +107,7 @@ const HomePage = ({ blogPosts, tredingBlogs }) => {
         {/* Main Content Area */}
         <div className="col-span-12 xl:col-span-8 relative max-w-[1200px] mx-auto xl:mx-0">
           <header className="mb-2 sm:mb-4 md:mb-6 text-start text-black dark:text-white text-2xl sm:text-3xl md:text-4xl font-bold">
-              Top Treding
+              Top Trending
           </header>
 
           {/* News Carousel - Latest/Highlighted Posts */}
