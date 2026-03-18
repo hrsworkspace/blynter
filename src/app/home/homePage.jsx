@@ -97,7 +97,7 @@ const HomePage = ({ blogPosts, tredingBlogs }) => {
   const relatedArticles = getRelatedArticles();
 
   return (
-    <main className="bg-[#f4f3ef] dark:bg-gray-900  transition-all duration-500 ease-in-out min-h-screen w-full py-2 sm:py-4 md:py-6 lg:py-10 px-1 sm:px-2 md:px-4 lg:px-6 xl:px-8 2xl:px-12">
+    <main className="bg-[#f9f9f7] dark:bg-gray-900  transition-all duration-500 ease-in-out min-h-screen w-full py-2 sm:py-4 md:py-6 lg:py-10 px-1 sm:px-2 md:px-4 lg:px-6 xl:px-8 2xl:px-12">
       <div className="w-full max-w-[1920px] mx-auto grid grid-cols-12 gap-4 sm:gap-6 md:gap-8">
         {/* Left Sidebar - Hidden on screens smaller than xl */}
         <div className="max-xl:hidden col-span-2">
@@ -190,7 +190,7 @@ const HomePage = ({ blogPosts, tredingBlogs }) => {
                         <div className="flex items-center text-blue-600 dark:text-blue-400 font-semibold text-xs sm:text-sm group-hover:text-blue-700 dark:group-hover:text-blue-500 mt-auto pt-2">
                           <span>Read More</span>
                           <svg
-                            className="w-3 h-3 sm:w-4 sm:h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-200"
+                            className="w-3 h-3 sm:w-3.5 sm:h-3.5 transform group-hover:translate-x-1 transition-transform duration-200"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24">
