@@ -63,7 +63,7 @@ const BlogDetailPage = ({ category, blogDetails, relatedArticles = [] }) => {
 
   if (!blogDetails) {
     return (
-      <main className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <main className="min-h-screen bg-[#f4f3ef] dark:bg-gray-900 flex items-center justify-center">
         <section className="text-center" aria-label="Error message">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             Blog Post Not Found

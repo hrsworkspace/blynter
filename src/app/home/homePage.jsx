@@ -97,7 +97,7 @@ const HomePage = ({ blogPosts, tredingBlogs }) => {
   const relatedArticles = getRelatedArticles();
 
   return (
-    <main className="bg-gray-50 dark:bg-gray-900  transition-all duration-500 ease-in-out min-h-screen w-full py-2 sm:py-4 md:py-6 lg:py-10 px-1 sm:px-2 md:px-4 lg:px-6 xl:px-8 2xl:px-12">
+    <main className="bg-[#f4f3ef] dark:bg-gray-900  transition-all duration-500 ease-in-out min-h-screen w-full py-2 sm:py-4 md:py-6 lg:py-10 px-1 sm:px-2 md:px-4 lg:px-6 xl:px-8 2xl:px-12">
       <div className="w-full max-w-[1920px] mx-auto grid grid-cols-12 gap-4 sm:gap-6 md:gap-8">
         {/* Left Sidebar - Hidden on screens smaller than xl */}
         <div className="max-xl:hidden col-span-2">

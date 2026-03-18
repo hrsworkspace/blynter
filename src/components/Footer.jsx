@@ -1,5 +1,9 @@
 "use client";
 import Link from "next/link";
+import Logo from "../assets/main_logo.png";
+import Image from "next/image";
+
+
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,12 +14,16 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
           {/* Brand/About Section */}
           <section className="col-span-1 md:col-span-2 lg:col-span-1">
+          <div className="flex-shrink-0">
             <Link
               href="/"
-              className="text-2xl md:text-3xl font-bold text-white dark:text-gray-100 hover:text-blue-400 dark:hover:text-blue-500 transition-colors duration-200 mb-4 inline-block"
-              aria-label="Home">
-              Blog
+              className="text-2xl md:text-3xl font-bold text-gray-900 dark̀:text-gray-100 hover:text-blue-600 dark:hover:text-blue-500 transition-colors duration-200"
+              // onClick={closeMenu}
+              aria-label="Home"
+            >
+              <Image src={Logo} alt="logo" height={150} width={150} />
             </Link>
+          </div>
             <p className="text-sm text-gray-400 dark:text-gray-400 mt-4 leading-relaxed">
               Discover our latest articles and insights. Stay updated with the
               most recent blog posts and news.
@@ -166,7 +174,7 @@ export default function Footer() {
           aria-label="Footer bottom section">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-gray-400 dark:text-gray-400 text-center md:text-left">
-              © {currentYear} Blog. All rights reserved.
+              © {currentYear} Blynter. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center md:justify-end gap-4 text-sm">
               <Link
