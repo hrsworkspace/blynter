@@ -64,24 +64,30 @@ export async function getBlogsBySubCatgory({ subCatgory, excludeSlug, limit = 3,
       const allBlogs = await getAllBlogPosts({ preview, lng });
       if (!Array.isArray(allBlogs)) return [];
 
-      // Filter blogs by category
-      const subCatgoryBlogs = allBlogs.filter((blog) => {
-        const blogSubCatgory = Array.isArray(blog?.subCatgory)
-          ? blog.subCatgory[0]
-          : blog.subCatgory;
-        return blogSubCatgory === subCatgory;
-      });
+      const normalizeSlug = (value) => textToSlug(String(value || ""));
 
-      // Exclude current blog
-      const filteredBlogs = excludeSlug
-        ? subCatgoryBlogs.filter((blog) => {
+      // Fisher-Yates shuffle (unbiased)
+      const shuffleArray = (arr) => {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      };
+
+      const normalizedExcludeSlug = excludeSlug ? normalizeSlug(excludeSlug) : null;
+
+      // Random 3 blogs from the whole collection.
+      // "subCatgory" is intentionally ignored (no category/subcategory filtering).
+      const nonCurrentBlogs = normalizedExcludeSlug
+        ? allBlogs.filter((blog) => {
             const blogSlug = blog?.slug || textToSlug(blog?.heroTitle || "");
-            return blogSlug !== excludeSlug;
+            return normalizeSlug(blogSlug) !== normalizedExcludeSlug;
           })
-        : subCatgoryBlogs;
+        : allBlogs;
 
-      // Shuffle and return limited results
-      const shuffled = [...filteredBlogs].sort(() => Math.random() - 0.5);
+      const shuffled = shuffleArray(nonCurrentBlogs);
       return shuffled.slice(0, limit);
     } catch (err) {
       console.error("Error fetching blogs by category:", err);

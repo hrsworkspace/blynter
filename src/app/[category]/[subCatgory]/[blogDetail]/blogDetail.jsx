@@ -14,6 +14,7 @@ import { CheckIcon } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 
 const BlogDetailPage = ({ category, blogDetails, relatedArticles = [] }) => {
+  console.log("relatedArticles", relatedArticles)
   const [copied, setCopied] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
   const [urlPath] = useState(() => {
@@ -443,74 +444,77 @@ const BlogDetailPage = ({ category, blogDetails, relatedArticles = [] }) => {
 
           {/* Related Articles Section */}
           {relatedArticles && relatedArticles.length > 0 && (
-            <section className="max-w-7xl mx-auto px-4 py-12 mt-8 border-t border-black/20 dark:border-gray-500">
+            <section className="max-w-6xl mx-auto px-4 py-12 mt-8 border-t border-black/20 dark:border-gray-500">
               <h2 className="items-center justify-center text-center text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-8">
                 Related Articles
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {relatedArticles.map((article) => {
-                  const articleTitle = article?.heroTitle || "";
-                  const articleImageUrl = article?.heroImage?.url || "";
-                  const articleCategory = article?.category || "";
-                  const articleSlug = article?.slug || textToSlug(articleTitle);
-                  const categorySlug = textToSlug(articleCategory);
-                  const articleDescription = getDescription(article);
-
+                   const title = article?.heroTitle || "";
+                   const blogslug = article?.slug || textToSlug(title);
+                   const description = getDescription(article);
+                   const category = Array.isArray(article?.category)
+                     ? article?.category[0]
+                     : article?.category || "";
+                   const subCatgory = Array.isArray(article?.subCatgory)
+                     ? article?.subCatgory[0]
+                     : article?.subCatgory || "";
+                   const imageUrl = article?.heroImage?.url || "";
+                   const blogId = textToSlug(title);
+                   const categorySlug = textToSlug(category);
+                   const subCatgorySlug = textToSlug(subCatgory);
                   return (
                     <article
-                      key={articleSlug}
-                      className="group bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-800 transition-all duration-500 transform flex flex-col h-full"
-                    >
-                      <Link
-                        href={`/${categorySlug}/${articleSlug}`}
-                        className="flex flex-col h-full"
-                        prefetch={false}
-                      >
-                        {articleImageUrl && (
-                          <div className="relative w-full h-48 overflow-hidden">
-                            <Image
-                              src={articleImageUrl}
-                              alt={articleTitle || "image"}
-                              fill
-                              className="object-cover transition-transform "
-                            />
-                            {articleCategory && (
-                              <div className="absolute top-3 left-3">
-                                <span className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm text-gray-800 dark:text-gray-200 text-xs font-semibold px-3 py-1 rounded-full">
-                                  {articleCategory}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                        <div className="p-5 flex-1 flex flex-col">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
-                            {articleTitle}
-                          </h3>
-                          {articleDescription && (
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-3 flex-1">
-                              {articleDescription}
-                            </p>
+                    key={blogId}
+                    className="group bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-800 transition-all duration-500 transform flex flex-col h-full">
+                    <Link
+                      href={`/${categorySlug}/${subCatgorySlug}/${blogslug}`}
+                      className="flex flex-col h-full"
+                      prefetch={false}>
+                      {imageUrl && (
+                        <div className="relative w-full h-40 sm:h-44 md:h-48 overflow-hidden">
+                          <Image
+                            src={imageUrl}
+                            alt={title || "image"}
+                            fill
+                            className="object-cover transition-transform"
+                          />
+                          {subCatgory && (
+                            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 md:top-4 md:left-4">
+                              <span className="bg-white/90 dark:bg-gray-800/90 border dark:border-white/30 border-black/30 backdrop-blur-sm text-gray-800 dark:text-gray-200 text-xs font-semibold px-2 py-1 sm:px-3 sm:py-1 rounded-full">
+                                {subCatgory}
+                              </span>
+                            </div>
                           )}
-                          <div className="flex items-center text-blue-600 dark:text-blue-400 font-semibold text-sm group-hover:text-blue-700 dark:group-hover:text-blue-500 mt-auto pt-2">
-                            <span>Read More</span>
-                            <svg
-                              className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-200"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
-                          </div>
                         </div>
-                      </Link>
-                    </article>
+                      )}
+                      <div className="p-2 sm:p-3 md:p-4 flex-1 flex flex-col">
+                        <h1 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
+                          {title}
+                        </h1>
+                        {description && (
+                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 sm:mb-3 line-clamp-3 flex-1">
+                            {description}
+                          </p>
+                        )}
+                        <div className="flex items-center text-blue-600 dark:text-blue-400 font-semibold text-xs sm:text-sm group-hover:text-blue-700 dark:group-hover:text-blue-500 mt-auto pt-2">
+                          <span>Read More</span>
+                          <svg
+                            className="w-3 h-3 sm:w-3.5 sm:h-3.5 transform group-hover:translate-x-1 transition-transform duration-200"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </Link>
+                  </article>
                   );
                 })}
               </div>
