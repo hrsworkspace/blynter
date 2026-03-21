@@ -74,6 +74,7 @@ export default function RootLayout({ children }) {
   gtag('js', new Date());
   gtag('config', 'G-70Z9XRZ4S2');
 `}} />
+<meta name="google-site-verification" content="xmHVbTYxLLVXUUpml3yyXdnSb4Lb8x3pw7z6be1dVQQ" />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
       >
