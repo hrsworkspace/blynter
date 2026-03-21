@@ -45,7 +45,6 @@ export default function Header() {
   const themeDropdownMobileRef = useRef(null);
   const { theme, setTheme } = useTheme();
   const { scrollYProgress } = useScroll();
-  console.log("theme", theme);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -143,7 +142,7 @@ export default function Header() {
               onClick={closeMenu}
               aria-label="Home"
             >
-              <Image src={Logo} alt="logo" height={150} width={150} />
+              <Image fetchPriority="high" loading="lazy" src={Logo} alt="logo" height={150} width={150} />
             </Link>
           </div>
 

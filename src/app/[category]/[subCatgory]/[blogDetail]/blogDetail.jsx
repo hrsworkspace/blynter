@@ -14,7 +14,6 @@ import { CheckIcon } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 
 const BlogDetailPage = ({ category, blogDetails, relatedArticles = [] }) => {
-  console.log("relatedArticles", relatedArticles)
   const [copied, setCopied] = useState(false);
   const [openIndex, setOpenIndex] = useState(null);
   const [urlPath] = useState(() => {
@@ -104,6 +103,8 @@ const BlogDetailPage = ({ category, blogDetails, relatedArticles = [] }) => {
               role="banner"
             >
               <Image
+                fetchPriority="high"
+                loading="lazy"
                 src={imageUrl}
                 alt={title || "image"}
                 fill
@@ -474,6 +475,8 @@ const BlogDetailPage = ({ category, blogDetails, relatedArticles = [] }) => {
                       {imageUrl && (
                         <div className="relative w-full h-40 sm:h-44 md:h-48 overflow-hidden">
                           <Image
+                            fetchPriority="high"
+                            loading="lazy"
                             src={imageUrl}
                             alt={title || "image"}
                             fill

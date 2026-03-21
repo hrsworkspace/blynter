@@ -44,7 +44,7 @@ const HomePage = ({ blogPosts, tredingBlogs }) => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (e) {
-      console.log("Adsense error:", e);
+      console.error("Adsense error:", e);
     }
   }, []);
   // Helper function to extract description
@@ -164,6 +164,8 @@ const HomePage = ({ blogPosts, tredingBlogs }) => {
                       {imageUrl && (
                         <div className="relative w-full h-40 sm:h-44 md:h-48 overflow-hidden">
                           <Image
+                          fetchPriority="high"
+                            loading="lazy"
                             src={imageUrl}
                             alt={title || "image"}
                             fill

@@ -163,7 +163,7 @@ const renderTextContent = (content, keyPrefix = '') => {
       }
       if (node?.nodeType === 'image') {
         return (
-          <Image key={index} src={node?.file?.url} alt={node?.file?.title || "image"} width={node?.file?.width} height={node?.file?.height} />
+          <Image key={index} fetchPriority="high" loading="lazy" src={node?.file?.url} alt={node?.file?.title || "image"} width={node?.file?.width} height={node?.file?.height} />
         );
       }
       if (node?.nodeType === 'embedded-asset-block') {
@@ -182,6 +182,8 @@ const renderTextContent = (content, keyPrefix = '') => {
         return (
           <div key={index} className="my-6 flex justify-center">
             <Image
+              fetchPriority="high"
+              loading="lazy"
               src={imageUrl}
               alt={altText || "image"}
               width={width}

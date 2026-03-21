@@ -140,6 +140,8 @@ const NewsCarousel = ({
                 >
                   {imageUrl && (
                     <Image
+                      fetchPriority="high"
+                      loading="lazy"
                       src={imageUrl}
                       alt={title || "Featured news"}
                       fill

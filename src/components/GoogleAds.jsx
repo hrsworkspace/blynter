@@ -6,7 +6,7 @@ export default function GoogleAds() {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (err) {
-      console.log("Adsense error:", err);
+      console.error("Adsense error:", err);
     }
   }, []);
 

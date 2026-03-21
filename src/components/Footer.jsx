@@ -21,7 +21,7 @@ export default function Footer() {
               // onClick={closeMenu}
               aria-label="Home"
             >
-              <Image src={Logo} alt="logo" height={150} width={150} />
+              <Image fetchPriority="high" loading="lazy" src={Logo} alt="logo" height={150} width={150} />
             </Link>
           </div>
             <p className="text-sm text-gray-400 dark:text-gray-400 mt-4 leading-relaxed">
@@ -32,9 +32,9 @@ export default function Footer() {
 
           {/* Quick Links */}
           <section>
-            <h3 className="text-white dark:text-gray-100 font-semibold text-lg mb-4">
+            <div className="text-white dark:text-gray-100 font-semibold text-lg mb-4">
               Quick Links
-            </h3>
+            </div>
             <ul className="space-y-3">
               <li>
                 <Link
@@ -69,9 +69,9 @@ export default function Footer() {
 
           {/* Categories */}
           <section>
-            <h3 className="text-white dark:text-gray-100 font-semibold text-lg mb-4">
+            <div className="text-white dark:text-gray-100 font-semibold text-lg mb-4">
               Categories
-            </h3>
+            </div>
             <ul className="space-y-3">
               <li>
                 <Link
@@ -106,9 +106,9 @@ export default function Footer() {
 
           {/* Social Links */}
           <section>
-            <h3 className="text-white dark:text-gray-100 font-semibold text-lg mb-4">
+            <div className="text-white dark:text-gray-100 font-semibold text-lg mb-4">
               Follow Us
-            </h3>
+            </div>
             <div className="flex space-x-4">
               <Link
                 target="_blank"
