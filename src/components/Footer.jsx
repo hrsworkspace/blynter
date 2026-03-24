@@ -52,7 +52,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/"
+                  href="/about-us"
                   className="text-gray-400 dark:text-gray-400 hover:text-blue-400 dark:hover:text-blue-500 transition-colors duration-200 text-sm">
                   About Us
                 </Link>
@@ -177,13 +177,24 @@ export default function Footer() {
               © {currentYear} Blynter. All rights reserved.
             </p>
             <div className="flex flex-wrap justify-center md:justify-end gap-4 text-sm">
+              
+            <Link
+                href="/disclaimer"
+                className="text-gray-400 dark:text-gray-400 hover:text-blue-400 dark:hover:text-blue-500 transition-colors duration-200">
+                Disclaimer
+              </Link>
+              <Link
+                href="/affiliate-disclosure"
+                className="text-gray-400 dark:text-gray-400 hover:text-blue-400 dark:hover:text-blue-500 transition-colors duration-200">
+                Affiliate Disclosure
+              </Link>
               <Link
                 href="/privacy-policy"
                 className="text-gray-400 dark:text-gray-400 hover:text-blue-400 dark:hover:text-blue-500 transition-colors duration-200">
                 Privacy Policy
               </Link>
               <Link
-                href="/terms-condition"
+                href="/terms-of-service"
                 className="text-gray-400 dark:text-gray-400 hover:text-blue-400 dark:hover:text-blue-500 transition-colors duration-200">
                 Terms of Service
               </Link>

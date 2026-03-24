@@ -87,6 +87,13 @@ const renderTextContent = (content, keyPrefix = '') => {
 
     return json?.content?.map((node, index) => {
       if (node.nodeType === 'paragraph') {
+        const hasVisibleContent = node?.content?.some((child) => {
+          if (child.nodeType === 'text') return Boolean(child.value?.trim());
+          if (child.nodeType === 'hyperlink') return true;
+          return false;
+        });
+        if (!hasVisibleContent) return null;
+
         return (
           <p key={index} className="mb-4 text-gray-700 dark:text-gray-200 leading-relaxed">
             {renderTextContent(node?.content, `p-${index}`)}

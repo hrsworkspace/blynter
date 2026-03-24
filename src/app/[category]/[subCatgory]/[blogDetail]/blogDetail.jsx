@@ -109,7 +109,6 @@ const BlogDetailPage = ({ category, blogDetails, relatedArticles = [] }) => {
                 alt={title || "image"}
                 fill
                 className="object-cover"
-                priority
               />
               <div className="absolute inset-0 bg-black/40 dark:bg-black/50"></div>
               <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
