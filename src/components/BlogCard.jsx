@@ -2,7 +2,65 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Clock, User, ArrowRight, Eye } from "lucide-react";
-import { getCategoryColor, estimateReadingTime, textToSlug } from "@/helper/helper";
+import { estimateReadingTime, textToSlug } from "@/helper/helper";
+
+const CATEGORY_STYLES = {
+  sports: {
+    bg: "bg-blue-50 dark:bg-blue-950/40",
+    text: "text-blue-600 dark:text-blue-400",
+    border: "border-blue-200/50 dark:border-blue-800/40",
+    dot: "bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.5)]"
+  },
+  cricket: {
+    bg: "bg-emerald-50 dark:bg-emerald-950/40",
+    text: "text-emerald-600 dark:text-emerald-400",
+    border: "border-emerald-200/50 dark:border-emerald-800/40",
+    dot: "bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]"
+  },
+  football: {
+    bg: "bg-sky-50 dark:bg-sky-950/40",
+    text: "text-sky-600 dark:text-sky-400",
+    border: "border-sky-200/50 dark:border-sky-800/40",
+    dot: "bg-sky-500 shadow-[0_0_6px_rgba(14,165,233,0.5)]"
+  },
+  entertainment: {
+    bg: "bg-purple-50 dark:bg-purple-950/40",
+    text: "text-purple-600 dark:text-purple-400",
+    border: "border-purple-200/50 dark:border-purple-800/40",
+    dot: "bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.5)]"
+  },
+  bollywood: {
+    bg: "bg-pink-50 dark:bg-pink-950/40",
+    text: "text-pink-600 dark:text-pink-400",
+    border: "border-pink-200/50 dark:border-pink-800/40",
+    dot: "bg-pink-500 shadow-[0_0_6px_rgba(236,72,153,0.5)]"
+  },
+  hollywood: {
+    bg: "bg-rose-50 dark:bg-rose-950/40",
+    text: "text-rose-600 dark:text-rose-400",
+    border: "border-rose-200/50 dark:border-rose-800/40",
+    dot: "bg-rose-500 shadow-[0_0_6px_rgba(244,63,94,0.5)]"
+  },
+  default: {
+    bg: "bg-secondary-50 dark:bg-secondary-800/50",
+    text: "text-secondary-600 dark:text-secondary-400",
+    border: "border-secondary-200/50 dark:border-secondary-700/40",
+    dot: "bg-primary-500 shadow-[0_0_6px_rgba(37,99,235,0.5)]"
+  }
+};
+
+const getCategoryStyles = (categoryName) => {
+  const key = String(categoryName || "").toLowerCase();
+  return CATEGORY_STYLES[key] || CATEGORY_STYLES.default;
+};
+
+const formatBadgeLabel = (text) => {
+  if (!text) return "";
+  return text
+    .split(/[-_ ]+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};
 
 /**
  * Premium blog card — used in homepage grids, related posts, etc.
@@ -20,7 +78,7 @@ export default function BlogCard({ blog, variant = "default", priority = false }
   const catSlug     = textToSlug(category);
   const subCatSlug  = textToSlug(subCategory);
   const href        = `/${catSlug}/${subCatSlug}/${blogSlug}`;
-  const colors      = getCategoryColor(subCategory || category);
+  const colors      = getCategoryStyles(subCategory || category);
 
   // Estimate reading time from rich text JSON
   const readingTime = estimateReadingTime(blog?.heroDescription?.json);
@@ -62,13 +120,14 @@ export default function BlogCard({ blog, variant = "default", priority = false }
             <div className="absolute inset-0 bg-gradient-hero" />
 
             {/* Badges */}
-            <div className="absolute top-5 left-5 flex items-center gap-2">
-              <span className="badge bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+            <div className="absolute top-5 left-5 flex items-center gap-2 z-10">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-red-600 text-white shadow-[0_2px_10px_rgba(239,68,68,0.4)] animate-pulse">
                 🔥 TRENDING
               </span>
               {subCategory && (
-                <span className={`badge ${colors.bg} ${colors.text}`}>
-                  {subCategory}
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-white/90 dark:bg-secondary-900/90 backdrop-blur-md text-secondary-800 dark:text-secondary-100 border border-secondary-200/30 dark:border-secondary-700/30 shadow-lg">
+                  <span className={`w-2 h-2 rounded-full ${colors.dot}`} />
+                  {formatBadgeLabel(subCategory)}
                 </span>
               )}
             </div>
@@ -118,8 +177,9 @@ export default function BlogCard({ blog, variant = "default", priority = false }
           </div>
           <div className="flex-1 min-w-0">
             {subCategory && (
-              <span className={`badge ${colors.bg} ${colors.text} text-xs mb-1.5 inline-block`}>
-                {subCategory}
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase ${colors.bg} ${colors.text} border ${colors.border} mb-2`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                {formatBadgeLabel(subCategory)}
               </span>
             )}
             <h3 className="font-heading text-sm font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-150 line-clamp-2 leading-snug">
@@ -182,9 +242,10 @@ export default function BlogCard({ blog, variant = "default", priority = false }
 
           {/* Category badge over image */}
           {subCategory && (
-            <div className="absolute top-3 left-3">
-              <span className={`badge ${colors.bg} ${colors.text} shadow-sm`}>
-                {subCategory}
+            <div className="absolute top-3 left-3 z-10">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-white/90 dark:bg-secondary-900/90 backdrop-blur-md text-secondary-800 dark:text-secondary-100 border border-secondary-200/30 dark:border-secondary-700/30 shadow-md">
+                <span className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+                {formatBadgeLabel(subCategory)}
               </span>
             </div>
           )}
@@ -202,8 +263,9 @@ export default function BlogCard({ blog, variant = "default", priority = false }
         <div className="flex flex-col flex-1 p-4 sm:p-5">
           {/* Category */}
           {category && !subCategory && (
-            <span className={`badge ${getCategoryColor(category).bg} ${getCategoryColor(category).text} mb-2 self-start`}>
-              {category}
+            <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase ${getCategoryStyles(category).bg} ${getCategoryStyles(category).text} border ${getCategoryStyles(category).border} mb-2 self-start`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${getCategoryStyles(category).dot}`} />
+              {formatBadgeLabel(category)}
             </span>
           )}
 
