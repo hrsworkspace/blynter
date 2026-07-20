@@ -245,13 +245,13 @@ export default function Header() {
             {/* ── Desktop Actions ── */}
             <div className="hidden lg:flex items-center gap-2">
               {/* Search */}
-              <button
+              {/* <button
                 onClick={() => setIsSearchOpen(!isSearchOpen)}
                 className="p-2 rounded-lg text-secondary-500 dark:text-secondary-400 hover:text-secondary-900 dark:hover:text-white hover:bg-secondary-100 dark:hover:bg-secondary-800 transition-all duration-150"
                 aria-label="Toggle search"
               >
                 <Search size={18} />
-              </button>
+              </button> */}
 
               {/* Theme toggle */}
               <button
