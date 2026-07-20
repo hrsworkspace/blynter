@@ -15,8 +15,8 @@ const NAV_CATEGORIES = [
     icon: "🏆",
     href: "/sports",
     sub: [
-      { name: "Cricket",  href: "/sports/cricket",  icon: "🏏" },
-      { name: "Football", href: "/sports/football",  icon: "⚽" },
+      { name: "Cricket", href: "/sports/cricket", icon: "🏏" },
+      { name: "Football", href: "/sports/football", icon: "⚽" },
     ],
   },
   {
@@ -31,20 +31,20 @@ const NAV_CATEGORIES = [
 ];
 
 const NAV_LINKS = [
-  { name: "Trending",        href: "/", icon: TrendingUp },
-  { name: "Latest",          href: "/", icon: Clock },
+  { name: "Trending", href: "/", icon: TrendingUp },
+  { name: "Latest", href: "/", icon: Clock },
 ];
 
 export default function Header() {
-  const [isMenuOpen,      setIsMenuOpen]      = useState(false);
-  const [isScrolled,      setIsScrolled]      = useState(false);
-  const [scrollProgress,  setScrollProgress]  = useState(0);
-  const [isSearchOpen,    setIsSearchOpen]    = useState(false);
-  const [searchQuery,     setSearchQuery]     = useState("");
-  const [openDropdown,    setOpenDropdown]    = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [openDropdown, setOpenDropdown] = useState(null);
   const { theme, setTheme } = useTheme();
-  const searchRef  = useRef(null);
-  const headerRef  = useRef(null);
+  const searchRef = useRef(null);
+  const headerRef = useRef(null);
 
   // Scroll handler
   useEffect(() => {
@@ -85,6 +85,18 @@ export default function Header() {
     setOpenDropdown(null);
   };
 
+  const handleNewsletterClick = (e) => {
+    closeAll();
+    if (typeof window !== "undefined" && window.location.pathname === "/") {
+      const el = document.getElementById("newsletter");
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth" });
+        window.history.pushState(null, "", "/#newsletter");
+      }
+    }
+  };
+
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -103,11 +115,10 @@ export default function Header() {
 
       <header
         ref={headerRef}
-        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-          isScrolled
-            ? "bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md shadow-nav border-b border-secondary-100 dark:border-secondary-800"
-            : "bg-white dark:bg-secondary-900 border-b border-transparent"
-        }`}
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled
+          ? "bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md shadow-nav border-b border-secondary-100 dark:border-secondary-800"
+          : "bg-white dark:bg-secondary-900 border-b border-transparent"
+          }`}
       >
         {/* ── Top bar ── */}
         <div className="hidden lg:block bg-secondary-900 dark:bg-secondary-950 text-secondary-300 py-1.5">
@@ -156,7 +167,7 @@ export default function Header() {
                 height={50}
                 width={175}
                 priority
-                className="h-11 sm:h-12 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80"
+                className="h-11 sm:h-18 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80"
               />
             </Link>
 
@@ -171,11 +182,10 @@ export default function Header() {
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
                   <button
-                    className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-150 ${
-                      openDropdown === cat.name
-                        ? "text-primary-600 bg-primary-50 dark:text-primary-400 dark:bg-primary-900/20"
-                        : "text-secondary-700 dark:text-secondary-300 hover:text-secondary-900 dark:hover:text-white hover:bg-secondary-50 dark:hover:bg-secondary-800"
-                    }`}
+                    className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-150 ${openDropdown === cat.name
+                      ? "text-primary-600 bg-primary-50 dark:text-primary-400 dark:bg-primary-900/20"
+                      : "text-secondary-700 dark:text-secondary-300 hover:text-secondary-900 dark:hover:text-white hover:bg-secondary-50 dark:hover:bg-secondary-800"
+                      }`}
                     aria-expanded={openDropdown === cat.name}
                     aria-haspopup="true"
                   >
@@ -188,11 +198,10 @@ export default function Header() {
 
                   {/* Dropdown */}
                   <div
-                    className={`absolute top-full left-0 mt-1 w-48 bg-white dark:bg-secondary-800 rounded-xl shadow-dropdown border border-secondary-100 dark:border-secondary-700 overflow-hidden transition-all duration-200 origin-top ${
-                      openDropdown === cat.name
-                        ? "opacity-100 scale-100 pointer-events-auto"
-                        : "opacity-0 scale-95 pointer-events-none"
-                    }`}
+                    className={`absolute top-full left-0 mt-1 w-48 bg-white dark:bg-secondary-800 rounded-xl shadow-dropdown border border-secondary-100 dark:border-secondary-700 overflow-hidden transition-all duration-200 origin-top ${openDropdown === cat.name
+                      ? "opacity-100 scale-100 pointer-events-auto"
+                      : "opacity-0 scale-95 pointer-events-none"
+                      }`}
                   >
                     <div className="py-1.5">
                       {cat.sub.map((item) => (
@@ -255,7 +264,8 @@ export default function Header() {
 
               {/* Newsletter CTA */}
               <Link
-                href="#newsletter"
+                href="/#newsletter"
+                onClick={handleNewsletterClick}
                 className="btn-primary"
                 aria-label="Subscribe to newsletter"
               >
@@ -294,9 +304,8 @@ export default function Header() {
 
           {/* ── Search Bar ── */}
           <div
-            className={`overflow-hidden transition-all duration-300 ${
-              isSearchOpen ? "max-h-20 pb-3 opacity-100" : "max-h-0 opacity-0"
-            }`}
+            className={`overflow-hidden transition-all duration-300 ${isSearchOpen ? "max-h-20 pb-3 opacity-100" : "max-h-0 opacity-0"
+              }`}
           >
             <form onSubmit={handleSearchSubmit} className="relative">
               <Search
@@ -320,9 +329,8 @@ export default function Header() {
         {/* ── Mobile Menu Overlay ── */}
         <div
           id="mobile-menu"
-          className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${
-            isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-          }`}
+          className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+            }`}
           style={{ top: "var(--header-height, 64px)" }}
         >
           {/* Backdrop */}
@@ -334,9 +342,8 @@ export default function Header() {
 
           {/* Menu panel */}
           <div
-            className={`absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white dark:bg-secondary-900 shadow-2xl transform transition-transform duration-300 overflow-y-auto ${
-              isMenuOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+            className={`absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white dark:bg-secondary-900 shadow-2xl transform transition-transform duration-300 overflow-y-auto ${isMenuOpen ? "translate-x-0" : "translate-x-full"
+              }`}
           >
             <div className="px-4 py-6 space-y-1">
               {/* Home */}
@@ -361,15 +368,13 @@ export default function Header() {
                     </span>
                     <ChevronDown
                       size={16}
-                      className={`transition-transform duration-200 text-secondary-400 ${
-                        openDropdown === cat.name ? "rotate-180" : ""
-                      }`}
+                      className={`transition-transform duration-200 text-secondary-400 ${openDropdown === cat.name ? "rotate-180" : ""
+                        }`}
                     />
                   </button>
                   <div
-                    className={`overflow-hidden transition-all duration-200 ${
-                      openDropdown === cat.name ? "max-h-40" : "max-h-0"
-                    }`}
+                    className={`overflow-hidden transition-all duration-200 ${openDropdown === cat.name ? "max-h-40" : "max-h-0"
+                      }`}
                   >
                     {cat.sub.map((item) => (
                       <Link
@@ -410,8 +415,8 @@ export default function Header() {
               {/* Newsletter CTA */}
               <div className="pt-4 border-t border-secondary-100 dark:border-secondary-800">
                 <Link
-                  href="#newsletter"
-                  onClick={closeAll}
+                  href="/#newsletter"
+                  onClick={handleNewsletterClick}
                   className="btn-primary w-full justify-center"
                 >
                   <Mail size={16} />

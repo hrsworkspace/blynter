@@ -91,7 +91,7 @@ export default function Footer() {
                 alt="Blynter"
                 height={48}
                 width={160}
-                className="h-10 sm:h-11 w-auto object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity"
+                className="h-10 sm:h-18 w-auto object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity"
               />
             </Link>
             <p className="text-sm text-secondary-400 leading-relaxed mb-5 max-w-xs">

@@ -160,8 +160,11 @@ export default function BlogDetailPage({ category, blogDetails, relatedArticles 
   const articleRef = useRef(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") setUrlPath(window.location.href);
-  }, []);
+    if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+      setUrlPath(window.location.href);
+    }
+  }, [blogDetails?.slug]);
 
   /* ── Not found ── */
   if (!blogDetails) {

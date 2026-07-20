@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { ThemeProvider } from "../contexts/ThemeProvider";
 import Script from "next/script";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
+import NavigationScrollToTop from "@/components/NavigationScrollToTop";
 import { FLAGS, ADS_CONFIG, SITE } from "@/config/flags";
 
 const inter = Inter({
@@ -164,6 +165,7 @@ export default function RootLayout({ children }) {
         className={`${inter.variable} ${plusJakartaSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-surface-light dark:bg-surface-dark text-secondary-900 dark:text-secondary-100`}
       >
         <ThemeProvider>
+          <NavigationScrollToTop />
           <div className="flex flex-col min-h-screen">
             <Header />
             <div className="flex-grow">{children}</div>

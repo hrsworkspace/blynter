@@ -23,10 +23,10 @@ const CardSkeleton = () => (
 
 /* ─── Featured Categories ───────────────────────────── */
 const FEATURED_CATEGORIES = [
-  { name: "Cricket",    emoji: "🏏", href: "/sports/cricket",          desc: "Live scores, analysis & more",    color: "from-green-500 to-emerald-600",  count: "48 Articles" },
-  { name: "Football",   emoji: "⚽", href: "/sports/football",          desc: "Transfers, results & standings",  color: "from-blue-500 to-blue-700",      count: "36 Articles" },
-  { name: "Bollywood",  emoji: "🎭", href: "/entertainment/bollywood",  desc: "Reviews, gossip & box office",   color: "from-pink-500 to-rose-600",      count: "52 Articles" },
-  { name: "Hollywood",  emoji: "⭐", href: "/entertainment/hollywood",  desc: "Blockbusters, awards & more",    color: "from-purple-500 to-violet-700",  count: "44 Articles" },
+  { name: "Cricket", emoji: "🏏", href: "/sports/cricket", desc: "Live scores, analysis & more", color: "from-green-500 to-emerald-600", count: "48 Articles" },
+  { name: "Football", emoji: "⚽", href: "/sports/football", desc: "Transfers, results & standings", color: "from-blue-500 to-blue-700", count: "36 Articles" },
+  { name: "Bollywood", emoji: "🎭", href: "/entertainment/bollywood", desc: "Reviews, gossip & box office", color: "from-pink-500 to-rose-600", count: "52 Articles" },
+  { name: "Hollywood", emoji: "⭐", href: "/entertainment/hollywood", desc: "Blockbusters, awards & more", color: "from-purple-500 to-violet-700", count: "44 Articles" },
 ];
 
 /* ─── Ad Block Component ────────────────────────────── */
@@ -49,7 +49,7 @@ const AdBlock = ({ slot, className = "" }) => {
 
 /* ─── Main ──────────────────────────────────────────── */
 export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
-  const [email, setEmail]         = useState("");
+  const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [visibleCount, setVisibleCount] = useState(9);
 
@@ -59,7 +59,7 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
     try {
       const ads = document.querySelectorAll(".adsbygoogle");
       ads.forEach(() => (window.adsbygoogle = window.adsbygoogle || []).push({}));
-    } catch (_) {}
+    } catch (_) { }
   }, []);
 
   const getDescription = (blog) => {
@@ -76,14 +76,14 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
   };
 
   const safe = (arr) => (Array.isArray(arr) ? arr : []);
-  const posts    = safe(blogPosts);
+  const posts = safe(blogPosts);
   const trending = safe(tredingBlogs);
 
-  const heroPost      = trending[0] || posts[0];
+  const heroPost = trending[0] || posts[0];
   const heroSecondary = trending.slice(1, 3);
-  const trendingList  = trending.slice(0, 6);
-  const latestPosts   = posts.slice(0, visibleCount);
-  const popularPosts  = posts.slice(0, 5);
+  const trendingList = trending.slice(0, 6);
+  const latestPosts = posts.slice(0, visibleCount);
+  const popularPosts = posts.slice(0, 5);
 
   return (
     <main className="bg-secondary-50 dark:bg-secondary-950 min-h-screen">
@@ -113,11 +113,11 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
 
                 {heroSecondary.length > 0
                   ? heroSecondary.map((post, i) => (
-                      <BlogCard key={i} blog={post} variant="default" />
-                    ))
+                    <BlogCard key={i} blog={post} variant="default" />
+                  ))
                   : posts.slice(1, 3).map((post, i) => (
-                      <BlogCard key={i} blog={post} variant="default" />
-                    ))}
+                    <BlogCard key={i} blog={post} variant="default" />
+                  ))}
               </div>
             </div>
           </div>
@@ -173,16 +173,16 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {trendingList.map((post, index) => {
-                const title      = post?.heroTitle || "";
-                const category   = Array.isArray(post?.category)   ? post.category[0]   : post?.category   || "";
-                const subCat     = Array.isArray(post?.subCatgory) ? post.subCatgory[0] : post?.subCatgory || "";
-                const imageUrl   = post?.heroImage?.url || "";
-                const blogSlug   = post?.slug || textToSlug(title);
-                const catSlug    = textToSlug(category);
+                const title = post?.heroTitle || "";
+                const category = Array.isArray(post?.category) ? post.category[0] : post?.category || "";
+                const subCat = Array.isArray(post?.subCatgory) ? post.subCatgory[0] : post?.subCatgory || "";
+                const imageUrl = post?.heroImage?.url || "";
+                const blogSlug = post?.slug || textToSlug(title);
+                const catSlug = textToSlug(category);
                 const subCatSlug = textToSlug(subCat);
-                const href       = `/${catSlug}/${subCatSlug}/${blogSlug}`;
-                const colors     = getCategoryColor(subCat || category);
-                const readTime   = estimateReadingTime(post?.heroDescription?.json);
+                const href = `/${catSlug}/${subCatSlug}/${blogSlug}`;
+                const colors = getCategoryColor(subCat || category);
+                const readTime = estimateReadingTime(post?.heroDescription?.json);
 
                 return (
                   <article key={index} className="card card-hover group flex gap-4 p-4">
@@ -323,7 +323,7 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
       ════════════════════════════════════════════════ */}
       <section
         id="newsletter"
-        className="relative overflow-hidden bg-gradient-newsletter py-16 lg:py-20"
+        className="relative overflow-hidden bg-gradient-newsletter py-16 lg:py-20 scroll-mt-24 lg:scroll-mt-28"
         aria-label="Newsletter signup"
       >
         {/* Background texture */}
