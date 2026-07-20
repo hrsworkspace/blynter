@@ -1,537 +1,427 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
-import { useTheme } from "../contexts/ThemeProvider";
-import { motion, useScroll } from "motion/react";
-import { HiOutlineMoon } from "react-icons/hi";
-import { LuSun } from "react-icons/lu";
-import Logo from "../assets/main_logo.png";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useTheme } from "../contexts/ThemeProvider";
+import Logo from "../assets/main_logo.png";
+import {
+  Search, Moon, Sun, Menu, X, ChevronDown,
+  TrendingUp, Clock, Mail, Flame
+} from "lucide-react";
 
-const headerCategory = [
+const NAV_CATEGORIES = [
   {
     name: "Sports",
-    href: "",
+    icon: "🏆",
+    href: "/sports",
     sub: [
-      { name: "Cricket", href: "/sports/cricket" },
-      { name: "Football", href: "/sports/football" },
+      { name: "Cricket",  href: "/sports/cricket",  icon: "🏏" },
+      { name: "Football", href: "/sports/football",  icon: "⚽" },
     ],
   },
   {
     name: "Entertainment",
-    href: "",
+    icon: "🎬",
+    href: "/entertainment",
     sub: [
-      { name: "Bollywood", href: "/entertainment/bollywood" },
-      { name: "Hollywood", href: "/entertainment/hollywood" },
+      { name: "Bollywood", href: "/entertainment/bollywood", icon: "🎭" },
+      { name: "Hollywood", href: "/entertainment/hollywood", icon: "⭐" },
     ],
   },
-  // {
-  //   name: "Technology",
-  //   href: "/technology",
-  // },
-  // {
-  //   name: "Business",
-  //   href: "/business",
-  // },
+];
+
+const NAV_LINKS = [
+  { name: "Trending",        href: "/", icon: TrendingUp },
+  { name: "Latest",          href: "/", icon: Clock },
 ];
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const themeDropdownDesktopRef = useRef(null);
-  const themeDropdownMobileRef = useRef(null);
+  const [isMenuOpen,      setIsMenuOpen]      = useState(false);
+  const [isScrolled,      setIsScrolled]      = useState(false);
+  const [scrollProgress,  setScrollProgress]  = useState(0);
+  const [isSearchOpen,    setIsSearchOpen]    = useState(false);
+  const [searchQuery,     setSearchQuery]     = useState("");
+  const [openDropdown,    setOpenDropdown]    = useState(null);
   const { theme, setTheme } = useTheme();
-  const { scrollYProgress } = useScroll();
+  const searchRef  = useRef(null);
+  const headerRef  = useRef(null);
 
+  // Scroll handler
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
-
-      // Calculate scroll progress
-      const windowHeight =
-        document.documentElement.scrollHeight -
-        document.documentElement.clientHeight;
-      const scrolled = window.scrollY;
-      const progress = windowHeight > 0 ? (scrolled / windowHeight) * 100 : 0;
-      setScrollProgress(Math.min(100, Math.max(0, progress)));
+      const winH = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      setScrollProgress(winH > 0 ? Math.min(100, (window.scrollY / winH) * 100) : 0);
     };
-
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close theme dropdown when clicking outside
+  // Focus search input when opened
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      const desktopContains = themeDropdownDesktopRef.current?.contains(
-        event.target
-      );
-      const mobileContains = themeDropdownMobileRef.current?.contains(
-        event.target
-      );
+    if (isSearchOpen) searchRef.current?.focus();
+  }, [isSearchOpen]);
 
-      if (isThemeDropdownOpen && !desktopContains && !mobileContains) {
-        setIsThemeDropdownOpen(false);
-      }
-    };
+  // Close mobile menu on resize
+  useEffect(() => {
+    const onResize = () => { if (window.innerWidth >= 1024) setIsMenuOpen(false); };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
-    if (isThemeDropdownOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+  // Lock body scroll when mobile menu open
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isMenuOpen]);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isThemeDropdownOpen]);
+  const toggleTheme = useCallback(() => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  }, [theme, setTheme]);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
+  const closeAll = () => {
     setIsMenuOpen(false);
+    setIsSearchOpen(false);
+    setOpenDropdown(null);
   };
 
-  const getThemeIcon = () => {
-    if (theme === "light") {
-      return <LuSun size={20} className="text-orange-400" />;
-    } else if (theme === "dark") {
-      return (
-        <HiOutlineMoon size={20} className="text-gray-700 dark:text-gray-400" />
-      );
-    } else {
-      return (
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-          />
-        </svg>
-      );
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      window.location.href = `/?q=${encodeURIComponent(searchQuery.trim())}`;
     }
   };
 
   return (
-    <header
-      className={`sticky top-0 z-50 w-full transition-all duration-500 ${
-        isScrolled
-          ? "bg-stone-700 dark:bg-gray-950/70 backdrop-blur-md shadow-lg border-b border-gray-200/20 dark:border-gray-700/20"
-          : "bg-stone-700 dark:bg-gray-950"
-      }`}
-    >
-      <nav
-        className="w-full mx-auto px-4 sm:px-6 lg:px-8"
-        aria-label="Main navigation"
+    <>
+      {/* Reading Progress Bar */}
+      <div
+        id="reading-progress"
+        style={{ width: `${scrollProgress}%` }}
+        aria-hidden="true"
+      />
+
+      <header
+        ref={headerRef}
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+          isScrolled
+            ? "bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md shadow-nav border-b border-secondary-100 dark:border-secondary-800"
+            : "bg-white dark:bg-secondary-900 border-b border-transparent"
+        }`}
       >
-        <div className="flex items-center justify-between h-14 md:h-16">
-          {/* Logo/Brand */}
-          <div className="flex-shrink-0">
-            <Link
-              href="/"
-              className="text-2xl md:text-3xl font-bold text-gray-900 dark̀:text-gray-100 hover:text-blue-600 dark:hover:text-blue-500 transition-colors duration-200"
-              onClick={closeMenu}
-              aria-label="Home"
-            >
-              <Image fetchPriority="high" loading="lazy" src={Logo} alt="logo" height={150} width={150} />
-            </Link>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <ul className="flex items-center gap-4">
-              {headerCategory?.map((item) => (
-                <li key={item.name} className="relative group">
-                  {/* Main Category */}
-                  {item.href ? (
-                    <Link
-                      href={item?.sub?.length === 0 ? item.href : "#"}
-                      className="
-                        flex items-center gap-1
-                        px-3 py-1.5
-                        rounded-full
-                        border border-black dark:border-gray-700
-                        bg-white dark:bg-gray-900
-                        text-black dark:text-gray-300
-                        font-bold text-sm
-                        hover:bg-gray-100 dark:hover:bg-gray-800
-                        hover:border-gray-400 dark:hover:border-gray-600
-                        hover:text-gray-900 dark:hover:text-white
-                        transition-all duration-300
-                      "
-                    >
-                      {item.name}
-
-                      {item.sub && (
-                        <ChevronDown
-                          className="
-                            w-4 h-4
-                            transition-transform duration-300
-                            group-hover:rotate-180
-                          "
-                        />
-                      )}
-                    </Link>
-                  ) : (
-                    <button
-                      type="button"
-                      className="
-                        flex items-center gap-1
-                        px-3 py-1.5
-                        rounded-full
-                        border border-black dark:border-gray-700
-                        bg-white dark:bg-gray-900
-                        text-black dark:text-gray-300
-                        font-bold text-sm
-                        hover:bg-gray-100 dark:hover:bg-gray-800
-                        hover:border-gray-400 dark:hover:border-gray-600
-                        hover:text-gray-900 dark:hover:text-white
-                        transition-all duration-300
-                      "
-                    >
-                      {item.name}
-                      {item.sub && (
-                        <ChevronDown
-                          className="
-                            w-4 h-4
-                            transition-transform duration-300
-                            group-hover:rotate-180
-                          "
-                        />
-                      )}
-                    </button>
-                  )}
-
-                  {/* Dropdown */}
-                  {/* Dropdown */}
-                  {item?.sub && (
-                    <div
-                      className="
-              absolute left-1/2 top-full mt-3
-              -translate-x-1/2
-              w-max
-              bg-white dark:bg-gray-900
-              font-bold
-              rounded-xl shadow-xl
-              border border-black dark:border-gray-800
-              opacity-0 invisible
-              translate-y-2
-              group-hover:opacity-100
-              group-hover:visible
-              group-hover:translate-y-0
-              transition-all duration-300
-              z-50
-            "
-                    >
-                      <ul className="py-3">
-                        {item?.sub?.map((subItem) => (
-                          <li key={subItem.name}>
-                            <Link
-                              href={subItem.href}
-                              className="
-              block px-4 py-1.5 text-sm
-              text-gray-600 dark:text-gray-300
-              hover:bg-blue-50 dark:hover:bg-gray-800
-              hover:text-blue-600 dark:hover:text-blue-400
-              transition-all duration-200
-            "
-                            >
-                              {subItem.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </li>
-              ))}
-              <li className="relative" ref={themeDropdownDesktopRef}>
-                <button
-                  onClick={() => {
-                    if (theme === "light") {
-                      setTheme("dark");
-                    } else {
-                      setTheme("light");
-                    }
-                  }}
-                  className={`flex items-center justify-center p-2 rounded-full border-2 border-orange-400 dark:border-blue-600 transition-colors duration-200 ${
-                    theme === "light"
-                      ? "text-orange-400 bg-orange-50 hover:bg-orange-100"
-                      : "text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-800"
-                  }`}
-                  aria-label="Theme selector"
-                >
-                  {getThemeIcon()}
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Mobile menu button and theme selector */}
-          <div className="md:hidden flex items-center space-x-2">
-            {/* Theme button for mobile */}
-            <div className="relative" ref={themeDropdownMobileRef}>
-              <button
-                onClick={() => {
-                  if (theme === "light") {
-                    setTheme("dark");
-                  } else {
-                    setTheme("light");
-                  }
-                }}
-                className={`inline-flex items-center rounded-full justify-center p-2 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 ${
-                  theme === "light"
-                    ? "text-orange-400 bg-orange-50 hover:bg-orange-100"
-                    : "text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-800"
-                }`}
-                aria-label="Theme selector"
-              >
-                {getThemeIcon()}
-              </button>
-
-              {/* {isThemeDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                  <div className="py-1" role="menu">
-                    <button
-                      onClick={() => {
-                        setTheme("light");
-                        setIsThemeDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center space-x-2 ${
-                        theme === "light"
-                          ? "bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-500"
-                          : "text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                      } transition-colors duration-200`}
-                      role="menuitem">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                        />
-                      </svg>
-                      <span>Light</span>
-                      {theme === "light" && (
-                        <svg
-                          className="w-4 h-4 ml-auto"
-                          fill="currentColor"
-                          viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => {
-                        setTheme("dark");
-                        setIsThemeDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center space-x-2 ${
-                        theme === "dark"
-                          ? "bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-500"
-                          : "text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                      } transition-colors duration-200`}
-                      role="menuitem">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                        />
-                      </svg>
-                      <span>Dark</span>
-                      {theme === "dark" && (
-                        <svg
-                          className="w-4 h-4 ml-auto"
-                          fill="currentColor"
-                          viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      )}
-                    </button>
-                    <button
-                      onClick={() => {
-                        setTheme("system");
-                        setIsThemeDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-2 text-sm flex items-center space-x-2 ${
-                        theme === "system"
-                          ? "bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-500"
-                          : "text-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-                      } transition-colors duration-200`}
-                      role="menuitem">
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                        />
-                      </svg>
-                      <span>System</span>
-                      {theme === "system" && (
-                        <svg
-                          className="w-4 h-4 ml-auto"
-                          fill="currentColor"
-                          viewBox="0 0 20 20">
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              )} */}
+        {/* ── Top bar ── */}
+        <div className="hidden lg:block bg-secondary-900 dark:bg-secondary-950 text-secondary-300 py-1.5">
+          <div className="max-w-8xl mx-auto px-6 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-1.5 overflow-hidden">
+              <span className="flex items-center gap-1 font-semibold text-white shrink-0">
+                <Flame size={12} className="text-red-400" />
+                TRENDING:
+              </span>
+              <div className="ticker-wrapper flex-1 overflow-hidden">
+                <span className="ticker-track gap-8 text-secondary-300 hover:text-white transition-colors">
+                  {[
+                    "India vs Australia: 3rd Test Day 2 Live Updates",
+                    "Rohit Sharma hits century in historic chase",
+                    "Bollywood Box Office: Week 28 Roundup",
+                    "Champions League Draw: Group Stage Set",
+                    "Spider-Man 4 officially confirmed by Marvel",
+                    "India vs Australia: 3rd Test Day 2 Live Updates",
+                    "Rohit Sharma hits century in historic chase",
+                    "Bollywood Box Office: Week 28 Roundup",
+                    "Champions League Draw: Group Stage Set",
+                    "Spider-Man 4 officially confirmed by Marvel",
+                  ].map((t, i) => (
+                    <span key={i} className="inline-block">{t}&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                  ))}
+                </span>
+              </div>
             </div>
-
-            <button
-              onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
-              aria-expanded={isMenuOpen}
-              aria-label="Toggle menu"
-              aria-controls="mobile-menu"
-            >
-              {isMenuOpen ? (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="block h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              )}
-            </button>
+            <div className="flex items-center gap-4 shrink-0 ml-4">
+              <time className="text-secondary-400" dateTime={new Date().toISOString().split("T")[0]}>
+                {new Date().toLocaleDateString("en-US", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}
+              </time>
+            </div>
           </div>
         </div>
 
-        {/* Mobile Navigation Menu */}
-        <section
-          id="mobile-menu"
-          className={`md:hidden transition-all duration-500 ease-in-out ${
-            isMenuOpen
-              ? "max-h-96 opacity-100"
-              : "max-h-0 opacity-0 overflow-hidden"
-          }`}
-          aria-label="Mobile navigation menu"
-        >
-          <ul className="px-2 pt-2 pb-4 space-y-1 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 list-none">
-            <li>
+        {/* ── Main nav ── */}
+        <nav className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
+          <div className="flex items-center justify-between h-16">
+
+            {/* Logo */}
+            <Link href="/" onClick={closeAll} aria-label="Blynter Home" className="flex-shrink-0 group">
+              <Image
+                src={Logo}
+                alt="Blynter"
+                height={50}
+                width={175}
+                priority
+                className="h-11 sm:h-12 w-auto object-contain transition-opacity duration-200 group-hover:opacity-80"
+              />
+            </Link>
+
+            {/* ── Desktop Nav ── */}
+            <div className="hidden lg:flex items-center gap-1">
+              {/* Categories with dropdowns */}
+              {NAV_CATEGORIES.map((cat) => (
+                <div
+                  key={cat.name}
+                  className="relative group"
+                  onMouseEnter={() => setOpenDropdown(cat.name)}
+                  onMouseLeave={() => setOpenDropdown(null)}
+                >
+                  <button
+                    className={`flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-150 ${
+                      openDropdown === cat.name
+                        ? "text-primary-600 bg-primary-50 dark:text-primary-400 dark:bg-primary-900/20"
+                        : "text-secondary-700 dark:text-secondary-300 hover:text-secondary-900 dark:hover:text-white hover:bg-secondary-50 dark:hover:bg-secondary-800"
+                    }`}
+                    aria-expanded={openDropdown === cat.name}
+                    aria-haspopup="true"
+                  >
+                    <span>{cat.name}</span>
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-200 ${openDropdown === cat.name ? "rotate-180" : ""}`}
+                    />
+                  </button>
+
+                  {/* Dropdown */}
+                  <div
+                    className={`absolute top-full left-0 mt-1 w-48 bg-white dark:bg-secondary-800 rounded-xl shadow-dropdown border border-secondary-100 dark:border-secondary-700 overflow-hidden transition-all duration-200 origin-top ${
+                      openDropdown === cat.name
+                        ? "opacity-100 scale-100 pointer-events-auto"
+                        : "opacity-0 scale-95 pointer-events-none"
+                    }`}
+                  >
+                    <div className="py-1.5">
+                      {cat.sub.map((item) => (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          onClick={closeAll}
+                          className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-secondary-700 dark:text-secondary-300 hover:bg-primary-50 dark:hover:bg-secondary-700 hover:text-primary-700 dark:hover:text-primary-400 transition-colors duration-100"
+                        >
+                          <span className="text-base">{item.icon}</span>
+                          <span className="font-medium">{item.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {/* Static links */}
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={closeAll}
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-secondary-700 dark:text-secondary-300 hover:text-secondary-900 dark:hover:text-white hover:bg-secondary-50 dark:hover:bg-secondary-800 rounded-lg transition-all duration-150"
+                >
+                  <link.icon size={14} />
+                  <span>{link.name}</span>
+                </Link>
+              ))}
+
               <Link
-                href="/"
-                className="block px-3 py-2 text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md font-medium transition-colors duration-200"
-                onClick={closeMenu}
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/"
-                className="block px-3 py-2 text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md font-medium transition-colors duration-200"
-                onClick={closeMenu}
-              >
-                Blog
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/"
-                className="block px-3 py-2 text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md font-medium transition-colors duration-200"
-                onClick={closeMenu}
-              >
-                About
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/"
-                className="block px-3 py-2 text-gray-700 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-500 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md font-medium transition-colors duration-200"
-                onClick={closeMenu}
+                href="/contact"
+                onClick={closeAll}
+                className="px-3 py-2 text-sm font-medium text-secondary-700 dark:text-secondary-300 hover:text-secondary-900 dark:hover:text-white hover:bg-secondary-50 dark:hover:bg-secondary-800 rounded-lg transition-all duration-150"
               >
                 Contact
               </Link>
-            </li>
-          </ul>
-        </section>
-      </nav>
+            </div>
 
-      {/* Scroll Progress Bar */}
-      {/* <div 
-        className="absolute bottom-0 left-0 h-1.5 rounded-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 dark:from-blue-400 dark:via-blue-500 dark:to-blue-600 transition-all duration-150 ease-out"
-        style={{ 
-          width: `${scrollProgress}%`,
-          boxShadow: scrollProgress > 0 ? '0 0 10px rgba(59, 130, 246, 0.5)' : 'none'
-        }}
-      /> */}
-      <motion.div
-        id="scroll-indicator"
-        style={{
-          scaleX: scrollYProgress,
-          position: "fixed",
-          // top: 0,
-          borderRadius: 50,
-          left: 0,
-          right: 0,
-          height: 5,
-          originX: 0,
-          backgroundColor: "#ff0088",
-        }}
-      />
-    </header>
+            {/* ── Desktop Actions ── */}
+            <div className="hidden lg:flex items-center gap-2">
+              {/* Search */}
+              <button
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                className="p-2 rounded-lg text-secondary-500 dark:text-secondary-400 hover:text-secondary-900 dark:hover:text-white hover:bg-secondary-100 dark:hover:bg-secondary-800 transition-all duration-150"
+                aria-label="Toggle search"
+              >
+                <Search size={18} />
+              </button>
+
+              {/* Theme toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg text-secondary-500 dark:text-secondary-400 hover:text-secondary-900 dark:hover:text-white hover:bg-secondary-100 dark:hover:bg-secondary-800 transition-all duration-150"
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+
+              {/* Newsletter CTA */}
+              <Link
+                href="#newsletter"
+                className="btn-primary"
+                aria-label="Subscribe to newsletter"
+              >
+                <Mail size={14} />
+                <span>Subscribe</span>
+              </Link>
+            </div>
+
+            {/* ── Mobile Actions ── */}
+            <div className="flex lg:hidden items-center gap-2">
+              <button
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                className="p-2 rounded-lg text-secondary-600 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-800 transition-colors"
+                aria-label="Search"
+              >
+                <Search size={18} />
+              </button>
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg text-secondary-600 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-800 transition-colors"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2 rounded-lg text-secondary-600 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-800 transition-colors"
+                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={isMenuOpen}
+                aria-controls="mobile-menu"
+              >
+                {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
+          </div>
+
+          {/* ── Search Bar ── */}
+          <div
+            className={`overflow-hidden transition-all duration-300 ${
+              isSearchOpen ? "max-h-20 pb-3 opacity-100" : "max-h-0 opacity-0"
+            }`}
+          >
+            <form onSubmit={handleSearchSubmit} className="relative">
+              <Search
+                size={16}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary-400"
+                aria-hidden="true"
+              />
+              <input
+                ref={searchRef}
+                type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search articles..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-secondary-50 dark:bg-secondary-800 border border-secondary-200 dark:border-secondary-700 text-secondary-900 dark:text-white placeholder-secondary-400 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                aria-label="Search articles"
+              />
+            </form>
+          </div>
+        </nav>
+
+        {/* ── Mobile Menu Overlay ── */}
+        <div
+          id="mobile-menu"
+          className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${
+            isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
+          style={{ top: "var(--header-height, 64px)" }}
+        >
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-secondary-900/60 backdrop-blur-sm"
+            onClick={closeAll}
+            aria-hidden="true"
+          />
+
+          {/* Menu panel */}
+          <div
+            className={`absolute right-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white dark:bg-secondary-900 shadow-2xl transform transition-transform duration-300 overflow-y-auto ${
+              isMenuOpen ? "translate-x-0" : "translate-x-full"
+            }`}
+          >
+            <div className="px-4 py-6 space-y-1">
+              {/* Home */}
+              <Link
+                href="/"
+                onClick={closeAll}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold text-secondary-900 dark:text-white hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors"
+              >
+                🏠 Home
+              </Link>
+
+              {/* Categories */}
+              {NAV_CATEGORIES.map((cat) => (
+                <div key={cat.name}>
+                  <button
+                    onClick={() => setOpenDropdown(openDropdown === cat.name ? null : cat.name)}
+                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-base font-semibold text-secondary-900 dark:text-white hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors"
+                  >
+                    <span className="flex items-center gap-3">
+                      <span>{cat.icon}</span>
+                      {cat.name}
+                    </span>
+                    <ChevronDown
+                      size={16}
+                      className={`transition-transform duration-200 text-secondary-400 ${
+                        openDropdown === cat.name ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  <div
+                    className={`overflow-hidden transition-all duration-200 ${
+                      openDropdown === cat.name ? "max-h-40" : "max-h-0"
+                    }`}
+                  >
+                    {cat.sub.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={closeAll}
+                        className="flex items-center gap-3 pl-10 pr-4 py-2.5 text-sm font-medium text-secondary-600 dark:text-secondary-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-secondary-800/50 rounded-xl transition-colors"
+                      >
+                        <span>{item.icon}</span>
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              {/* Other links */}
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={closeAll}
+                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold text-secondary-900 dark:text-white hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors"
+                >
+                  <link.icon size={18} className="text-secondary-400" />
+                  {link.name}
+                </Link>
+              ))}
+
+              <Link
+                href="/contact"
+                onClick={closeAll}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-semibold text-secondary-900 dark:text-white hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors"
+              >
+                📧 Contact
+              </Link>
+
+              {/* Newsletter CTA */}
+              <div className="pt-4 border-t border-secondary-100 dark:border-secondary-800">
+                <Link
+                  href="#newsletter"
+                  onClick={closeAll}
+                  className="btn-primary w-full justify-center"
+                >
+                  <Mail size={16} />
+                  Subscribe to Newsletter
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    </>
   );
 }

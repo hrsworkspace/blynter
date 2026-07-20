@@ -1,228 +1,431 @@
 "use client";
-import GoogleAds from "@/components/GoogleAds";
-import NewsCarousel from "@/components/NewsCarousel";
-import { textToSlug } from "@/helper/helper";
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import Image from "next/image";
+import { Mail, TrendingUp, BookOpen, ChevronRight, Flame, Clock, User, ArrowRight, Star } from "lucide-react";
+import BlogCard from "@/components/BlogCard";
+import { textToSlug, getCategoryColor, estimateReadingTime } from "@/helper/helper";
+import { FLAGS, ADS_CONFIG, CATEGORIES as SITE_CATEGORIES } from "@/config/flags";
 
-const BlogSkeleton = () => {
+/* ─── Skeleton ──────────────────────────────────────── */
+const CardSkeleton = () => (
+  <div className="card flex flex-col h-full">
+    <div className="aspect-[16/9] skeleton-shimmer rounded-t-2xl" />
+    <div className="p-5 space-y-3 flex-1">
+      <div className="h-3 skeleton-shimmer rounded w-20" />
+      <div className="h-5 skeleton-shimmer rounded w-full" />
+      <div className="h-5 skeleton-shimmer rounded w-3/4" />
+      <div className="h-3 skeleton-shimmer rounded w-full" />
+      <div className="h-3 skeleton-shimmer rounded w-4/5" />
+    </div>
+  </div>
+);
+
+/* ─── Featured Categories ───────────────────────────── */
+const FEATURED_CATEGORIES = [
+  { name: "Cricket",    emoji: "🏏", href: "/sports/cricket",          desc: "Live scores, analysis & more",    color: "from-green-500 to-emerald-600",  count: "48 Articles" },
+  { name: "Football",   emoji: "⚽", href: "/sports/football",          desc: "Transfers, results & standings",  color: "from-blue-500 to-blue-700",      count: "36 Articles" },
+  { name: "Bollywood",  emoji: "🎭", href: "/entertainment/bollywood",  desc: "Reviews, gossip & box office",   color: "from-pink-500 to-rose-600",      count: "52 Articles" },
+  { name: "Hollywood",  emoji: "⭐", href: "/entertainment/hollywood",  desc: "Blockbusters, awards & more",    color: "from-purple-500 to-violet-700",  count: "44 Articles" },
+];
+
+/* ─── Ad Block Component ────────────────────────────── */
+const AdBlock = ({ slot, className = "" }) => {
+  if (!FLAGS.ENABLE_ADS) return null;
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900 overflow-hidden flex flex-col h-full animate-pulse">
-      {/* Image skeleton */}
-      <div className="relative w-full h-40 sm:h-44 md:h-48 bg-gray-200 dark:bg-gray-700">
-        {/* Category badge skeleton */}
-        <div className="absolute top-2 left-2 sm:top-3 sm:left-3 md:top-4 md:left-4">
-          <div className="h-5 sm:h-6 w-16 sm:w-20 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-        </div>
-      </div>
-      {/* Content skeleton */}
-      <div className="p-3 sm:p-4 md:p-5 flex-1 flex flex-col">
-        {/* Title skeleton */}
-        <div className="mb-2 sm:mb-3">
-          <div className="h-4 sm:h-5 md:h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-          {/* <div className='h-6 bg-gray-200 rounded w-1/2'></div> */}
-        </div>
-        {/* Description skeleton */}
-        <div className="mb-2 sm:mb-3 flex-1 space-y-2">
-          <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-          <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-          {/* <div className='h-4 bg-gray-200 rounded w-5/6'></div> */}
-        </div>
-        {/* Read More skeleton */}
-        <div className="flex items-center mt-auto pt-2">
-          <div className="h-3 sm:h-4 bg-gray-200 dark:bg-gray-700 rounded w-16 sm:w-20"></div>
-          <div className="h-3 w-3 sm:h-4 sm:w-4 bg-gray-200 dark:bg-gray-700 rounded ml-2"></div>
-        </div>
-      </div>
+    <div className={`ad-container overflow-hidden ${className}`}>
+      <p className="text-xs text-secondary-300 dark:text-secondary-600 text-center py-1">Advertisement</p>
+      <ins
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client={ADS_CONFIG.PUBLISHER_ID}
+        data-ad-slot={slot}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
     </div>
   );
 };
 
-const HomePage = ({ blogPosts, tredingBlogs }) => {
+/* ─── Main ──────────────────────────────────────────── */
+export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
+  const [email, setEmail]         = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(9);
+
+  // Fire AdSense only when enabled
   useEffect(() => {
+    if (!FLAGS.ENABLE_ADS) return;
     try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("Adsense error:", e);
-    }
+      const ads = document.querySelectorAll(".adsbygoogle");
+      ads.forEach(() => (window.adsbygoogle = window.adsbygoogle || []).push({}));
+    } catch (_) {}
   }, []);
-  // Helper function to extract description
+
   const getDescription = (blog) => {
     try {
-      if (blog?.heroDescription?.json?.content) {
-        const content = blog.heroDescription.json.content;
-        if (Array.isArray(content) && content.length > 0) {
-          return content[0]?.value || content[0]?.content?.[0]?.value || "";
-        }
-      }
-      return "";
-    } catch (error) {
-      return "";
-    }
+      const content = blog?.heroDescription?.json?.content;
+      if (!Array.isArray(content)) return "";
+      const first = content.find((n) => n.nodeType === "paragraph");
+      if (!first) return "";
+      return (first.content || [])
+        .map((n) => (n.nodeType === "text" ? n.value : ""))
+        .join("")
+        .slice(0, 200);
+    } catch { return ""; }
   };
 
-  // Get blogs from other categories for related articles
-  const getRelatedArticles = () => {
-    if (!blogPosts || blogPosts.length === 0) return [];
+  const safe = (arr) => (Array.isArray(arr) ? arr : []);
+  const posts    = safe(blogPosts);
+  const trending = safe(tredingBlogs);
 
-    // Get all categories and count them
-    const categoryCount = {};
-    blogPosts.forEach((blog) => {
-      const category = Array.isArray(blog?.category)
-        ? blog?.category[0]
-        : blog?.category || "";
-      categoryCount[category] = (categoryCount[category] || 0) + 1;
-    });
-
-    // Find the most common category
-    const mostCommonCategory = Object.keys(categoryCount).reduce((a, b) =>
-      categoryCount[a] > categoryCount[b] ? a : b
-    );
-
-    // Filter blogs from other categories (excluding the most common one)
-    const otherCategoryBlogs = blogPosts.filter((blog) => {
-      const category = Array.isArray(blog?.category)
-        ? blog?.category[0]
-        : blog?.category || "";
-      return category !== mostCommonCategory;
-    });
-
-    // Return first 3 blogs from other categories, or first 3 blogs if all are same category
-    return otherCategoryBlogs.length >= 3
-      ? otherCategoryBlogs.slice(0, 3)
-      : blogPosts.slice(0, 3);
-  };
-
-  const relatedArticles = getRelatedArticles();
+  const heroPost      = trending[0] || posts[0];
+  const heroSecondary = trending.slice(1, 3);
+  const trendingList  = trending.slice(0, 6);
+  const latestPosts   = posts.slice(0, visibleCount);
+  const popularPosts  = posts.slice(0, 5);
 
   return (
-    <main className="bg-[#f9f9f7] dark:bg-gray-900  transition-all duration-500 ease-in-out min-h-screen w-full py-2 sm:py-4 md:py-6 lg:py-10 px-1 sm:px-2 md:px-4 lg:px-6 xl:px-8 2xl:px-12">
-      <div className="w-full max-w-[1920px] mx-auto grid grid-cols-12 gap-4 sm:gap-6 md:gap-8">
-        {/* Left Sidebar - Hidden on screens smaller than xl */}
-        <div className="max-xl:hidden col-span-2">
-          {/* <GoogleAds /> */}
-        </div>
+    <main className="bg-secondary-50 dark:bg-secondary-950 min-h-screen">
 
-        {/* Main Content Area */}
-        <div className="col-span-12 xl:col-span-8 relative max-w-[1200px] mx-auto xl:mx-0">
-          <header className="mb-2 sm:mb-4 md:mb-6 text-start text-black dark:text-white text-2xl sm:text-3xl md:text-4xl font-bold">
-              Top Trending
-          </header>
+      {/* ═══════════════════════════════════════════════
+          SECTION 1: HERO
+      ════════════════════════════════════════════════ */}
+      {heroPost && (
+        <section className="bg-white dark:bg-secondary-900 border-b border-secondary-100 dark:border-secondary-800" aria-label="Featured article">
+          <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-10">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          {/* News Carousel - Latest/Highlighted Posts */}
-          {blogPosts && blogPosts.length > 0 && (
-            <div className="mb-6 sm:mb-8 md:mb-10">
-              <NewsCarousel tredingBlogs={tredingBlogs} autoSlideInterval={5000} />
+              {/* Large hero */}
+              <div className="lg:col-span-2">
+                <BlogCard blog={heroPost} variant="hero" priority />
+              </div>
+
+              {/* Secondary hero cards */}
+              <div className="flex flex-col gap-4">
+                {/* Editor's Pick Label */}
+                <div className="flex items-center gap-2">
+                  <Star size={14} className="text-amber-500 fill-amber-500" />
+                  <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
+                    Editor's Picks
+                  </span>
+                </div>
+
+                {heroSecondary.length > 0
+                  ? heroSecondary.map((post, i) => (
+                      <BlogCard key={i} blog={post} variant="default" />
+                    ))
+                  : posts.slice(1, 3).map((post, i) => (
+                      <BlogCard key={i} blog={post} variant="default" />
+                    ))}
+              </div>
             </div>
-          )}
-          <div className="py-4 text-start text-black dark:text-white text-lg sm:text-xl md:text-2xl font-bold">
-              More For You
           </div>
-          {false ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-6">
-              {[...Array(6)].map((_, index) => (
-                <BlogSkeleton key={index} />
-              ))}
+        </section>
+      )}
+
+      {/* ═══════════════════════════════════════════════
+          SECTION 2: FEATURED CATEGORIES
+      ════════════════════════════════════════════════ */}
+      <section className="bg-white dark:bg-secondary-900 border-b border-secondary-100 dark:border-secondary-800" aria-label="Featured categories">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="section-header">
+            <BookOpen size={18} className="text-primary-600" />
+            <h2 className="section-title">Browse Categories</h2>
+            <div className="section-line" />
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {FEATURED_CATEGORIES.map((cat) => (
+              <Link
+                key={cat.name}
+                href={cat.href}
+                className="group relative rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className={`bg-gradient-to-br ${cat.color} p-5 h-full`}>
+                  <div className="text-4xl mb-3">{cat.emoji}</div>
+                  <h3 className="font-heading text-lg font-bold text-white mb-1">{cat.name}</h3>
+                  <p className="text-white/80 text-xs leading-relaxed mb-3">{cat.desc}</p>
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-white/90 bg-white/20 px-2.5 py-1 rounded-full">
+                    {cat.count}
+                    <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          SECTION 3: TRENDING NOW
+      ════════════════════════════════════════════════ */}
+      {trendingList.length > 0 && (
+        <section className="bg-secondary-50 dark:bg-secondary-950 py-10" aria-label="Trending articles">
+          <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="section-header mb-6">
+              <Flame size={18} className="text-red-500" />
+              <h2 className="section-title">Trending Now</h2>
+              <div className="section-line" />
+              <Link href="/" className="flex items-center gap-1 text-sm font-semibold text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 shrink-0 transition-colors">
+                See all <ChevronRight size={14} />
+              </Link>
             </div>
-          ) : blogPosts?.length === 0 ? (
-            <section
-              className="flex justify-center items-center py-12 sm:py-16 md:py-20 lg:py-24"
-              aria-label="Empty state">
-              <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
-                No blog posts found.
-              </p>
-            </section>
-          ) : (
-            
-            <section
-              className="grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 xll:grid-cols-4 gap-4 sm:gap-5 md:gap-6 lg:gap-6"
-              aria-label="Blog posts">
-              {blogPosts?.map((blog) => {
-                const title = blog?.heroTitle || "";
-                const blogslug = blog?.slug || textToSlug(title);
-                const description = getDescription(blog);
-                const category = Array.isArray(blog?.category)
-                  ? blog?.category[0]
-                  : blog?.category || "";
-                const subCatgory = Array.isArray(blog?.subCatgory)
-                  ? blog?.subCatgory[0]
-                  : blog?.subCatgory || "";
-                const imageUrl = blog?.heroImage?.url || "";
-                const blogId = textToSlug(title);
-                const categorySlug = textToSlug(category);
-                const subCatgorySlug = textToSlug(subCatgory);
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {trendingList.map((post, index) => {
+                const title      = post?.heroTitle || "";
+                const category   = Array.isArray(post?.category)   ? post.category[0]   : post?.category   || "";
+                const subCat     = Array.isArray(post?.subCatgory) ? post.subCatgory[0] : post?.subCatgory || "";
+                const imageUrl   = post?.heroImage?.url || "";
+                const blogSlug   = post?.slug || textToSlug(title);
+                const catSlug    = textToSlug(category);
+                const subCatSlug = textToSlug(subCat);
+                const href       = `/${catSlug}/${subCatSlug}/${blogSlug}`;
+                const colors     = getCategoryColor(subCat || category);
+                const readTime   = estimateReadingTime(post?.heroDescription?.json);
 
                 return (
-                  <article
-                    key={blogId}
-                    className="group bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-800 transition-all duration-500 transform flex flex-col h-full">
-                    <Link
-                      href={`/${categorySlug}/${subCatgorySlug}/${blogslug}`}
-                      className="flex flex-col h-full"
-                      prefetch={false}>
-                      {imageUrl && (
-                        <div className="relative w-full h-40 sm:h-44 md:h-48 overflow-hidden">
-                          <Image
-                          fetchPriority="high"
-                            loading="lazy"
-                            src={imageUrl}
-                            alt={title || "image"}
-                            fill
-                            className="object-cover transition-transform"
-                          />
-                          {subCatgory && (
-                            <div className="absolute top-2 left-2 sm:top-3 sm:left-3 md:top-4 md:left-4">
-                              <span className="bg-white/90 dark:bg-gray-800/90 border dark:border-white/30 border-black/30 backdrop-blur-sm text-gray-800 dark:text-gray-200 text-xs font-semibold px-2 py-1 sm:px-3 sm:py-1 rounded-full">
-                                {subCatgory}
-                              </span>
-                            </div>
-                          )}
-                        </div>
+                  <article key={index} className="card card-hover group flex gap-4 p-4">
+                    <div className="text-3xl font-black text-secondary-200 dark:text-secondary-700 leading-none w-8 shrink-0 mt-1">
+                      {String(index + 1).padStart(2, "0")}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      {subCat && (
+                        <span className={`badge ${colors.bg} ${colors.text} mb-2`}>{subCat}</span>
                       )}
-                      <div className="p-2 sm:p-3 md:p-4 flex-1 flex flex-col">
-                        <h1 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200 line-clamp-2">
+                      <Link href={href}>
+                        <h3 className="font-heading text-sm font-bold text-secondary-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2 leading-snug mb-2">
                           {title}
-                        </h1>
-                        {description && (
-                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 sm:mb-3 line-clamp-3 flex-1">
-                            {description}
-                          </p>
-                        )}
-                        <div className="flex items-center text-blue-600 dark:text-blue-400 font-semibold text-xs sm:text-sm group-hover:text-blue-700 dark:group-hover:text-blue-500 mt-auto pt-2">
-                          <span>Read More</span>
-                          <svg
-                            className="w-3 h-3 sm:w-3.5 sm:h-3.5 transform group-hover:translate-x-1 transition-transform duration-200"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 5l7 7-7 7"
-                            />
-                          </svg>
-                        </div>
+                        </h3>
+                      </Link>
+                      <div className="flex items-center gap-3 text-xs text-secondary-400">
+                        <span className="flex items-center gap-1"><Clock size={11} /> {readTime} min</span>
+                        <span className="flex items-center gap-1"><User size={11} /> {post?.publishedBy || "Editor"}</span>
                       </div>
-                    </Link>
+                    </div>
+                    {imageUrl && (
+                      <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 img-zoom">
+                        <Image src={imageUrl} alt={title} fill className="object-cover" sizes="80px" />
+                      </div>
+                    )}
                   </article>
                 );
               })}
-            </section>
-          )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ═══════════════════════════════════════════════
+          SECTION 4: LATEST ARTICLES + SIDEBAR
+      ════════════════════════════════════════════════ */}
+      <section className="py-10" aria-label="Latest articles">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+
+            {/* Main content */}
+            <div className="xl:col-span-3">
+              <div className="section-header mb-6">
+                <BookOpen size={18} className="text-primary-600" />
+                <h2 className="section-title">Latest Articles</h2>
+                <div className="section-line" />
+              </div>
+
+              {posts.length === 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
+                </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {latestPosts.map((blog, i) => (
+                      <BlogCard key={i} blog={blog} variant="default" priority={i < 3} />
+                    ))}
+                  </div>
+
+                  {/* Ad between article groups */}
+                  <div className="my-8">
+                    <AdBlock slot={ADS_CONFIG.SLOTS.HOMEPAGE_MID} className="min-h-[90px]" />
+                  </div>
+
+                  {/* Load more */}
+                  {visibleCount < posts.length && (
+                    <div className="text-center mt-6">
+                      <button
+                        onClick={() => setVisibleCount((c) => c + 9)}
+                        className="btn-secondary px-8 py-3 text-sm"
+                      >
+                        Load more articles
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            {/* Homepage Sidebar */}
+            <div className="xl:col-span-1">
+              <div className="sidebar-sticky space-y-6">
+
+                {/* Popular this week */}
+                {popularPosts.length > 0 && (
+                  <div className="bg-white dark:bg-secondary-800 rounded-2xl border border-secondary-100 dark:border-secondary-700/50 shadow-card p-5">
+                    <div className="section-header mb-4">
+                      <div className="w-1 h-5 bg-red-500 rounded-full" />
+                      <h3 className="section-title text-base">Popular This Week</h3>
+                    </div>
+                    <div className="space-y-4">
+                      {popularPosts.map((post, i) => (
+                        <div key={i} className="flex items-start gap-3">
+                          <span className="text-2xl font-black text-secondary-200 dark:text-secondary-700 leading-none mt-0.5 w-6 text-center shrink-0">
+                            {i + 1}
+                          </span>
+                          <BlogCard blog={post} variant="mini" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Sidebar Ad */}
+                <AdBlock slot={ADS_CONFIG.SLOTS.HOMEPAGE_SIDEBAR} className="min-h-[250px] flex items-center justify-center" />
+
+                {/* Categories */}
+                <div className="bg-white dark:bg-secondary-800 rounded-2xl border border-secondary-100 dark:border-secondary-700/50 shadow-card p-5">
+                  <div className="section-header mb-4">
+                    <div className="w-1 h-5 bg-primary-500 rounded-full" />
+                    <h3 className="section-title text-base">Categories</h3>
+                  </div>
+                  <div className="space-y-1.5">
+                    {FEATURED_CATEGORIES.map((cat) => (
+                      <Link
+                        key={cat.name}
+                        href={cat.href}
+                        className="flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium text-secondary-700 dark:text-secondary-300 hover:bg-primary-50 dark:hover:bg-secondary-700 hover:text-primary-700 dark:hover:text-primary-300 transition-colors group"
+                      >
+                        <span className="flex items-center gap-2.5">
+                          <span>{cat.emoji}</span>
+                          {cat.name}
+                        </span>
+                        <ChevronRight size={14} className="text-secondary-300 group-hover:text-primary-500 group-hover:translate-x-0.5 transition-all" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </section>
 
-        {/* Right Sidebar - Hidden on screens smaller than xl */}
-        <div className="max-xl:hidden col-span-2"></div>
+      {/* ═══════════════════════════════════════════════
+          SECTION 5: NEWSLETTER CTA
+      ════════════════════════════════════════════════ */}
+      <section
+        id="newsletter"
+        className="relative overflow-hidden bg-gradient-newsletter py-16 lg:py-20"
+        aria-label="Newsletter signup"
+      >
+        {/* Background texture */}
+        <div className="absolute inset-0 bg-noise opacity-30" aria-hidden="true" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary-400/20 rounded-full blur-3xl" aria-hidden="true" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-accent-400/20 rounded-full blur-3xl" aria-hidden="true" />
+
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider">
+            <Mail size={12} />
+            Free Newsletter
+          </div>
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+            Stay ahead of the game
+          </h2>
+          <p className="text-white/80 text-base sm:text-lg mb-8 max-w-xl mx-auto leading-relaxed">
+            Get the week's best sports moments and entertainment stories delivered to your inbox. No spam, ever.
+          </p>
+
+          {subscribed ? (
+            <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-2xl text-base font-semibold">
+              <span className="text-xl">🎉</span>
+              You're subscribed! Check your inbox.
+            </div>
+          ) : (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (email.trim()) setSubscribed(true);
+              }}
+              className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
+            >
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email address"
+                required
+                className="flex-1 px-5 py-3.5 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/30 transition-all text-sm"
+                aria-label="Email address"
+              />
+              <button
+                type="submit"
+                className="px-6 py-3.5 bg-white text-primary-700 rounded-xl font-bold text-sm hover:bg-primary-50 transition-colors duration-150 whitespace-nowrap shadow-lg"
+              >
+                Subscribe Free
+              </button>
+            </form>
+          )}
+
+          <p className="mt-4 text-white/50 text-xs">
+            Join 12,000+ readers · Unsubscribe anytime · No spam guaranteed
+          </p>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════
+          SECTION 6: MORE FOR YOU + BOTTOM AD
+      ════════════════════════════════════════════════ */}
+      {posts.length > 9 && (
+        <section className="bg-white dark:bg-secondary-900 py-10 border-t border-secondary-100 dark:border-secondary-800" aria-label="More articles">
+          <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="section-header mb-6">
+              <TrendingUp size={18} className="text-accent-600" />
+              <h2 className="section-title">Recommended For You</h2>
+              <div className="section-line" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+              {posts.slice(9, 13).map((blog, i) => (
+                <BlogCard key={i} blog={blog} variant="default" />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Bottom Ad */}
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <AdBlock slot={ADS_CONFIG.SLOTS.HOMEPAGE_BOTTOM} className="min-h-[90px]" />
       </div>
 
-      {/* Google Ads Component */}
-      <div className="w-full mt-6 sm:mt-8 md:mt-10 lg:mt-12">
-        {/* <GoogleAds /> */}
-      </div>
+      {/* ═══════════════════════════════════════════════
+          SECTION 7: TRUST BAR
+      ════════════════════════════════════════════════ */}
+      <section className="bg-secondary-50 dark:bg-secondary-950 border-t border-secondary-200 dark:border-secondary-800 py-6" aria-label="Trust signals">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-secondary-400 dark:text-secondary-500 font-medium">
+            {[
+              { icon: "✓", text: "Expert Editorial Team" },
+              { icon: "✓", text: "Fact-Checked Content" },
+              { icon: "✓", text: "Updated Regularly" },
+              { icon: "✓", text: "100% Original Reporting" },
+              { icon: "✓", text: "No AI-Generated Content" },
+            ].map((item) => (
+              <span key={item.text} className="flex items-center gap-1.5">
+                <span className="text-accent-600 font-bold">{item.icon}</span>
+                {item.text}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
     </main>
   );
-};
-
-export default HomePage;
+}
