@@ -1,5 +1,5 @@
 import { getLegalPageData } from "@/services/legalPagesService";
-import PrivacyPolicy from "./privacyPolicy";
+import LegalPageLayout from "@/components/LegalPageLayout";
 
 export async function generateMetadata() {
   const legal = await getLegalPageData({ slug: "privacy-policy" });
@@ -38,5 +38,11 @@ export async function generateMetadata() {
 
 export default async function PrivacyPolicyPage() {
   const data = await getLegalPageData({ slug: "privacy-policy" });
-  return <PrivacyPolicy data={data} />;
+  return (
+    <LegalPageLayout
+      data={data}
+      defaultTitle="Privacy Policy"
+      defaultSubtitle="How we collect, use, and protect your information when you use our site."
+    />
+  );
 }

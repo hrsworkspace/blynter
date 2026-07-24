@@ -16,8 +16,8 @@ function demoteHeadingOnes(json) {
   };
 }
 
-export default function PrivacyPolicy({ data }) {
-  const title = data?.pageName || 'Privacy Policy';
+export default function LegalPageLayout({ data, defaultTitle, defaultSubtitle }) {
+  const title = data?.pageName || defaultTitle;
   const richJson = data?.description?.json;
 
   const documentJson = useMemo(
@@ -34,15 +34,16 @@ export default function PrivacyPolicy({ data }) {
           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100">
             {title}
           </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-300 text-sm sm:text-base max-w-2xl">
-            How we collect, use, and protect your information when you use our
-            site.
-          </p>
+          {defaultSubtitle && (
+            <p className="mt-2 text-gray-600 dark:text-gray-300 text-sm sm:text-base max-w-2xl">
+              {defaultSubtitle}
+            </p>
+          )}
         </header>
 
         <article
           className="bg-white dark:bg-gray-800 border border-gray-200/60 dark:border-gray-700/60 rounded-xl shadow-md dark:shadow-gray-900 overflow-hidden"
-          aria-label="Privacy policy content"
+          aria-label={`${title} content`}
         >
           <div className="p-5 sm:p-7 lg:p-8">
             {hasBody ? (
@@ -53,8 +54,7 @@ export default function PrivacyPolicy({ data }) {
               </section>
             ) : (
               <p className="text-gray-600 dark:text-gray-400 text-center py-8">
-                No policy content is available right now. Please try again
-                later.
+                No content is available right now. Please try again later.
               </p>
             )}
           </div>
