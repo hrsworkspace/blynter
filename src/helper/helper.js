@@ -310,7 +310,7 @@ export const extractHeadings = (json) => {
   const seenIds = new Map();
 
   json.content.forEach((node) => {
-    if (["heading-2", "heading-3", "heading-4"].includes(node.nodeType)) {
+    if (["heading-1", "heading-2"].includes(node.nodeType)) {
       const text = (node.content || [])
         .map((n) => (n.nodeType === "text" ? n.value : ""))
         .join("")
@@ -332,7 +332,7 @@ export const extractHeadings = (json) => {
       seenIds.set(id, count);
       const finalId = count === 1 ? id : `${id}-${count}`;
 
-      const levelMap = { "heading-2": 2, "heading-3": 3, "heading-4": 4 };
+      const levelMap = { "heading-1": 1, "heading-2": 2 };
 
       headings.push({
         level: levelMap[node.nodeType] || 2,

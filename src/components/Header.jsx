@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import { useTheme } from "../contexts/ThemeProvider";
 import Logo from "../assets/main_logo.png";
 import {
@@ -36,6 +37,13 @@ const NAV_LINKS = [
 ];
 
 export default function Header() {
+  const pathname = usePathname();
+
+  // If in admin dashboard, do not render public header
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);

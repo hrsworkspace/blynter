@@ -112,6 +112,8 @@ export default function TableOfContents({ richTextJson }) {
 
   if (!headings.length) return null;
 
+  const hasH1 = headings.some((h) => h.level === 1);
+
   return (
     <nav
       className="bg-white dark:bg-secondary-800 rounded-2xl border border-secondary-100 dark:border-secondary-700/50 shadow-card overflow-hidden"
@@ -159,7 +161,7 @@ export default function TableOfContents({ richTextJson }) {
           <ul className="space-y-0.5" role="list">
             {headings.map((heading) => {
               const isActive = activeId === heading.id;
-              const isH3 = heading.level === 3;
+              const isSubHeading = hasH1 ? heading.level === 2 : false;
 
               return (
                 <li key={heading.id} role="listitem">
@@ -169,7 +171,7 @@ export default function TableOfContents({ richTextJson }) {
                     aria-current={isActive ? "location" : undefined}
                     className={[
                       "flex items-start gap-2 py-1.5 leading-snug transition-all duration-150 rounded-r",
-                      isH3 ? "pl-6 text-xs" : "pl-3 text-sm",
+                      isSubHeading ? "pl-6 text-xs" : "pl-3 text-sm",
                       "border-l-2",
                       isActive
                         ? "border-primary-500 text-primary-600 dark:text-primary-400 font-semibold bg-primary-50/60 dark:bg-primary-900/10"
@@ -180,7 +182,7 @@ export default function TableOfContents({ richTextJson }) {
                     {isActive && (
                       <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary-500 flex-shrink-0" aria-hidden="true" />
                     )}
-                    <span className={isActive ? "" : isH3 ? "pl-3.5" : "pl-0"}>
+                    <span className={isActive ? "" : isSubHeading ? "pl-3.5" : "pl-0"}>
                       {heading.text}
                     </span>
                   </a>

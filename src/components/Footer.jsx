@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { Mail, ArrowRight, Rss } from "lucide-react";
 import Logo from "../assets/main_logo.png";
 
@@ -67,6 +68,13 @@ const SOCIAL = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // If in admin dashboard, do not render public footer
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
