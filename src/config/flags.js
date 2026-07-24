@@ -78,9 +78,9 @@ export const SITE = {
 // ── Categories ────────────────────────────────────────────────
 export const CATEGORIES = [
   { name: "Cricket", href: "/sports/cricket", emoji: "🏏", count: "48" },
-  { name: "Football", href: "/sports/football", emoji: "⚽", count: "36" },
-  { name: "Bollywood", href: "/entertainment/bollywood", emoji: "🎭", count: "52" },
-  { name: "Hollywood", href: "/entertainment/hollywood", emoji: "⭐", count: "44" },
-  { name: "Sports", href: "/sports", emoji: "🏆", count: "84" },
-  { name: "Entertainment", href: "/entertainment", emoji: "🎬", count: "96" },
+  { name: "Finanace", href: "/finance", emoji: "⚽", count: "36" },
+  // { name: "Bollywood", href: "/entertainment/bollywood", emoji: "🎭", count: "52" },
+  // { name: "Hollywood", href: "/entertainment/hollywood", emoji: "⭐", count: "44" },
+  // { name: "Sports", href: "/sports", emoji: "🏆", count: "84" },
+  // { name: "Entertainment", href: "/entertainment", emoji: "🎬", count: "96" },
 ];

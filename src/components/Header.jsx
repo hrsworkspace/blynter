@@ -17,16 +17,15 @@ const NAV_CATEGORIES = [
     href: "/sports",
     sub: [
       { name: "Cricket", href: "/sports/cricket", icon: "🏏" },
-      { name: "Football", href: "/sports/football", icon: "⚽" },
+      // { name: "Football", href: "/sports/football", icon: "⚽" },
     ],
   },
   {
-    name: "Entertainment",
+    name: "Finance",
     icon: "🎬",
-    href: "/entertainment",
+    href: "/finance",
     sub: [
-      { name: "Bollywood", href: "/entertainment/bollywood", icon: "🎭" },
-      { name: "Hollywood", href: "/entertainment/hollywood", icon: "⭐" },
+      { name: "Personal Finance", href: "/finance", icon: "🎭" },
     ],
   },
 ];
@@ -205,14 +204,14 @@ export default function Header() {
                   </button>
 
                   {/* Dropdown */}
-                  <div
+                  {cat?.sub?.length > 0 && <div
                     className={`absolute top-full left-0 mt-1 w-48 bg-white dark:bg-secondary-800 rounded-xl shadow-dropdown border border-secondary-100 dark:border-secondary-700 overflow-hidden transition-all duration-200 origin-top ${openDropdown === cat.name
                       ? "opacity-100 scale-100 pointer-events-auto"
                       : "opacity-0 scale-95 pointer-events-none"
                       }`}
                   >
                     <div className="py-1.5">
-                      {cat.sub.map((item) => (
+                      {cat?.sub?.map((item) => (
                         <Link
                           key={item.name}
                           href={item.href}
@@ -224,7 +223,7 @@ export default function Header() {
                         </Link>
                       ))}
                     </div>
-                  </div>
+                  </div>}
                 </div>
               ))}
 
@@ -380,11 +379,11 @@ export default function Header() {
                         }`}
                     />
                   </button>
-                  <div
+                  {cat?.sub?.length > 0 && <div
                     className={`overflow-hidden transition-all duration-200 ${openDropdown === cat.name ? "max-h-40" : "max-h-0"
                       }`}
                   >
-                    {cat.sub.map((item) => (
+                    {cat?.sub?.map((item) => (
                       <Link
                         key={item.name}
                         href={item.href}
@@ -395,7 +394,7 @@ export default function Header() {
                         {item.name}
                       </Link>
                     ))}
-                  </div>
+                  </div>}
                 </div>
               ))}
 

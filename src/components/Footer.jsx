@@ -5,6 +5,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Mail, ArrowRight, Rss } from "lucide-react";
 import Logo from "../assets/main_logo.png";
+import { CATEGORIES } from "@/config/flags";
 
 const QUICK_LINKS = [
   { name: "Home", href: "/" },
@@ -13,15 +14,6 @@ const QUICK_LINKS = [
   { name: "About Us", href: "/about-us" },
   { name: "Contact", href: "/contact" },
   { name: "Editorial Policy", href: "/editorial-policy" },
-];
-
-const CATEGORIES = [
-  { name: "Cricket", href: "/sports/cricket" },
-  { name: "Football", href: "/sports/football" },
-  { name: "Bollywood", href: "/entertainment/bollywood" },
-  { name: "Hollywood", href: "/entertainment/hollywood" },
-  { name: "Sports", href: "/sports" },
-  { name: "Entertainment", href: "/entertainment" },
 ];
 
 const SOCIAL = [

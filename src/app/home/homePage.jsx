@@ -24,9 +24,7 @@ const CardSkeleton = () => (
 /* ─── Featured Categories ───────────────────────────── */
 const FEATURED_CATEGORIES = [
   { name: "Cricket", emoji: "🏏", href: "/sports/cricket", desc: "Live scores, analysis & more", color: "from-green-500 to-emerald-600", count: "48 Articles" },
-  { name: "Football", emoji: "⚽", href: "/sports/football", desc: "Transfers, results & standings", color: "from-blue-500 to-blue-700", count: "36 Articles" },
-  { name: "Bollywood", emoji: "🎭", href: "/entertainment/bollywood", desc: "Reviews, gossip & box office", color: "from-pink-500 to-rose-600", count: "52 Articles" },
-  { name: "Hollywood", emoji: "⭐", href: "/entertainment/hollywood", desc: "Blockbusters, awards & more", color: "from-purple-500 to-violet-700", count: "44 Articles" },
+  { name: "Finance", emoji: "⚽", href: "/finance", desc: "Transfers, results & standings", color: "from-blue-500 to-blue-700", count: "36 Articles" },
 ];
 
 /* ─── Ad Block Component ────────────────────────────── */
@@ -127,7 +125,7 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
       {/* ═══════════════════════════════════════════════
           SECTION 2: FEATURED CATEGORIES
       ════════════════════════════════════════════════ */}
-      <section className="bg-white dark:bg-secondary-900 border-b border-secondary-100 dark:border-secondary-800" aria-label="Featured categories">
+      {/* <section className="bg-white dark:bg-secondary-900 border-b border-secondary-100 dark:border-secondary-800" aria-label="Featured categories">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="section-header">
             <BookOpen size={18} className="text-primary-600" />
@@ -154,7 +152,7 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ═══════════════════════════════════════════════
           SECTION 3: TRENDING NOW

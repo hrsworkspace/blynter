@@ -3,15 +3,8 @@ import Link from "next/link";
 import { Mail } from "lucide-react";
 import BlogCard from "./BlogCard";
 import { useState } from "react";
-import { FLAGS, ADS_CONFIG } from "@/config/flags";
+import { FLAGS, ADS_CONFIG, CATEGORIES } from "@/config/flags";
 
-const CATEGORIES = [
-  { name: "Cricket",    href: "/sports/cricket",          emoji: "🏏", count: "48" },
-  { name: "Football",   href: "/sports/football",          emoji: "⚽", count: "36" },
-  { name: "Bollywood",  href: "/entertainment/bollywood",  emoji: "🎭", count: "52" },
-  { name: "Hollywood",  href: "/entertainment/hollywood",  emoji: "⭐", count: "44" },
-  { name: "Sports",     href: "/sports",                   emoji: "🏆", count: "84" },
-];
 
 export default function ArticleSidebar({ popularPosts = [], richTextJson }) {
   const [email, setEmail] = useState("");
@@ -98,7 +91,7 @@ export default function ArticleSidebar({ popularPosts = [], richTextJson }) {
       )}
 
       {/* ── Categories ── */}
-      <div className="bg-white dark:bg-secondary-800 rounded-2xl border border-secondary-100 dark:border-secondary-700/50 shadow-card p-5">
+      {/* <div className="bg-white dark:bg-secondary-800 rounded-2xl border border-secondary-100 dark:border-secondary-700/50 shadow-card p-5">
         <div className="section-header mb-4">
           <div className="w-1 h-5 bg-accent-500 rounded-full" />
           <h3 className="section-title text-base">Browse Categories</h3>
@@ -121,7 +114,7 @@ export default function ArticleSidebar({ popularPosts = [], richTextJson }) {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
 
       {/* ── AdSense: Bottom of sidebar ── */}
       {FLAGS.ENABLE_ADS && (
@@ -142,10 +135,10 @@ export default function ArticleSidebar({ popularPosts = [], richTextJson }) {
         <h3 className="font-heading text-base font-bold mb-4 text-white">Follow Us</h3>
         <div className="grid grid-cols-2 gap-2">
           {[
-            { name: "Facebook",  color: "hover:bg-blue-600",   icon: "📘" },
-            { name: "Twitter",   color: "hover:bg-sky-500",    icon: "🐦" },
-            { name: "Instagram", color: "hover:bg-pink-600",   icon: "📸" },
-            { name: "RSS Feed",  color: "hover:bg-orange-500", icon: "📡" },
+            { name: "Facebook", color: "hover:bg-blue-600", icon: "📘" },
+            { name: "Twitter", color: "hover:bg-sky-500", icon: "🐦" },
+            { name: "Instagram", color: "hover:bg-pink-600", icon: "📸" },
+            { name: "RSS Feed", color: "hover:bg-orange-500", icon: "📡" },
           ].map((s) => (
             <a
               key={s.name}
