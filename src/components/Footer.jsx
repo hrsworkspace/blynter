@@ -9,8 +9,8 @@ import { CATEGORIES } from "@/config/flags";
 
 const QUICK_LINKS = [
   { name: "Home", href: "/" },
-  { name: "Trending", href: "/" },
-  { name: "Latest Articles", href: "/" },
+  // { name: "Trending", href: "/" },
+  // { name: "Latest Articles", href: "/" },
   { name: "About Us", href: "/about-us" },
   { name: "Contact", href: "/contact" },
   { name: "Editorial Policy", href: "/editorial-policy" },

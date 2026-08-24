@@ -9,6 +9,8 @@ import {
   Search, Moon, Sun, Menu, X, ChevronDown,
   TrendingUp, Clock, Mail, Flame
 } from "lucide-react";
+import { getAllBlogPosts } from "@/services/blogServices";
+import { textToSlug } from "@/helper/helper";
 
 const NAV_CATEGORIES = [
   {
@@ -20,20 +22,38 @@ const NAV_CATEGORIES = [
       // { name: "Football", href: "/sports/football", icon: "⚽" },
     ],
   },
+  // {
+  //   name: "Entertainment",
+  //   icon: "🎬",
+  //   href: "/entertainment",
+  //   sub: [
+  //     { name: "Bollywood", href: "/entertainment/bollywood", icon: "🎭" },
+  //     { name: "Hollywood", href: "/entertainment/hollywood", icon: "⭐" },
+  //   ],
+  // },
   {
     name: "Finance",
-    icon: "🎬",
+    icon: "📈",
     href: "/finance",
     sub: [
-      { name: "Personal Finance", href: "/finance", icon: "🎭" },
+      { name: "Personal Finance", href: "/finance/personal-finance", icon: "💵" },
     ],
   },
 ];
 
 const NAV_LINKS = [
   { name: "Trending", href: "/", icon: TrendingUp },
-  { name: "Latest", href: "/", icon: Clock },
 ];
+
+const STATIC_TICKER_ITEMS = [
+  { text: "India vs Australia: 3rd Test Day 2 Live Updates", href: "/sports/cricket" },
+  { text: "Rohit Sharma hits century in historic chase", href: "/sports/cricket" },
+  { text: "Bollywood Box Office: Week 28 Roundup", href: "/entertainment/bollywood" },
+  { text: "Champions League Draw: Group Stage Set", href: "/sports/football" },
+  { text: "Spider-Man 4 officially confirmed by Marvel", href: "/entertainment/hollywood" },
+];
+
+const safe = (arr) => (Array.isArray(arr) ? arr : []);
 
 export default function Header() {
   const pathname = usePathname();
@@ -52,6 +72,32 @@ export default function Header() {
   const { theme, setTheme } = useTheme();
   const searchRef = useRef(null);
   const headerRef = useRef(null);
+  const [tickerItems, setTickerItems] = useState([]);
+
+  useEffect(() => {
+    async function fetchTickerPosts() {
+      try {
+        const postsData = await getAllBlogPosts({ preview: true });
+        const posts = safe(postsData).slice(0, 10);
+        if (posts.length > 0) {
+          const formatted = posts.map((post) => {
+            const title = post?.heroTitle || "";
+            const category = Array.isArray(post?.category) ? post.category[0] : post?.category || "";
+            const subCat = Array.isArray(post?.subCatgory) ? post.subCatgory[0] : post?.subCatgory || "";
+            const blogSlug = post?.slug || textToSlug(title);
+            const catSlug = textToSlug(category);
+            const subCatSlug = textToSlug(subCat);
+            const href = `/${catSlug}/${subCatSlug}/${blogSlug}`;
+            return { text: title, href };
+          });
+          setTickerItems([...formatted, ...formatted]);
+        }
+      } catch (error) {
+        console.error("Error fetching blog posts for header ticker:", error);
+      }
+    }
+    fetchTickerPosts();
+  }, []);
 
   // Scroll handler
   useEffect(() => {
@@ -130,30 +176,24 @@ export default function Header() {
         {/* ── Top bar ── */}
         <div className="hidden lg:block bg-secondary-900 dark:bg-secondary-950 text-secondary-300 py-1.5">
           <div className="max-w-8xl mx-auto px-6 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-1.5 overflow-hidden">
+            {tickerItems?.length > 0 && <div className="flex items-center gap-1.5 overflow-hidden">
               <span className="flex items-center gap-1 font-semibold text-white shrink-0">
                 <Flame size={12} className="text-red-400" />
                 TRENDING:
               </span>
               <div className="ticker-wrapper flex-1 overflow-hidden">
-                <span className="ticker-track gap-8 text-secondary-300 hover:text-white transition-colors">
-                  {[
-                    "India vs Australia: 3rd Test Day 2 Live Updates",
-                    "Rohit Sharma hits century in historic chase",
-                    "Bollywood Box Office: Week 28 Roundup",
-                    "Champions League Draw: Group Stage Set",
-                    "Spider-Man 4 officially confirmed by Marvel",
-                    "India vs Australia: 3rd Test Day 2 Live Updates",
-                    "Rohit Sharma hits century in historic chase",
-                    "Bollywood Box Office: Week 28 Roundup",
-                    "Champions League Draw: Group Stage Set",
-                    "Spider-Man 4 officially confirmed by Marvel",
-                  ].map((t, i) => (
-                    <span key={i} className="inline-block">{t}&nbsp;&nbsp;·&nbsp;&nbsp;</span>
+                <span
+                  className="ticker-track gap-8 text-secondary-300 hover:text-white transition-colors"
+                  style={{ animationDuration: `${tickerItems.length * 6 || 30}s` }}
+                >
+                  {tickerItems.map((item, i) => (
+                    <Link key={i} href={item.href} className="hover:text-primary-400 hover:underline inline-block transition-colors">
+                      {item.text}&nbsp;&nbsp;·&nbsp;&nbsp;
+                    </Link>
                   ))}
                 </span>
               </div>
-            </div>
+            </div>}
             <div className="flex items-center gap-4 shrink-0 ml-4">
               <time className="text-secondary-400" dateTime={new Date().toISOString().split("T")[0]}>
                 {new Date().toLocaleDateString("en-US", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}

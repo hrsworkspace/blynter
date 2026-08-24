@@ -127,6 +127,24 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <meta name="google-site-verification" content="xmHVbTYxLLVXUUpml3yyXdnSb4Lb8x3pw7z6be1dVQQ" />
+        <script
+          id="theme-initializer"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  var isDark = theme === 'dark' || ((!theme || theme === 'system') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                  if (isDark) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         <Script
           id="schema-organization"
           type="application/ld+json"
@@ -165,7 +183,7 @@ export default function RootLayout({ children }) {
         className={`${inter.variable} ${plusJakartaSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-surface-light dark:bg-surface-dark text-secondary-900 dark:text-secondary-100`}
       >
         <ThemeProvider>
-          <NavigationScrollToTop />
+          {/* <NavigationScrollToTop /> */}
           <div className="flex flex-col min-h-screen">
             <Header />
             <div className="flex-grow">{children}</div>

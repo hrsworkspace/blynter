@@ -4,7 +4,7 @@ import LegalPageLayout from "@/components/LegalPageLayout";
 export async function generateMetadata() {
   const legal = await getLegalPageData({ slug: "about-us" });
   return {
-    title: legal?.pageName ? `${legal.pageName} | Blynter` : "About Us",
+    title: legal?.pageName ? `${legal.pageName}` : "About Us",
     description:
       "Learn more about Blynter, our mission, editorial policy, and team.",
     alternates: {

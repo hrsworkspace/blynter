@@ -131,10 +131,12 @@ export default async function BlogDetails({ params, searchParams }) {
     headline: title,
     description: blogDetails?.metaDescription || "",
     image: imageUrl ? [imageUrl] : [],
+    datePublished: blogDetails?.sys?.firstPublishedAt || blogDetails?.sys?.createdAt || new Date().toISOString(),
+    dateModified: blogDetails?.sys?.publishedAt || blogDetails?.sys?.updatedAt || new Date().toISOString(),
     author: {
       "@type": "Person",
       name: author,
-      url: baseUrl,
+      url: `${baseUrl}/author/${textToSlug(author)}`,
     },
     publisher: {
       "@type": "Organization",

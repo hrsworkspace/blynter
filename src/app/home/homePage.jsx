@@ -105,7 +105,7 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
                 <div className="flex items-center gap-2">
                   <Star size={14} className="text-amber-500 fill-amber-500" />
                   <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">
-                    Editor's Picks
+                    Editor&apos;s Picks
                   </span>
                 </div>
 
@@ -338,13 +338,13 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
             Stay ahead of the game
           </h2>
           <p className="text-white/80 text-base sm:text-lg mb-8 max-w-xl mx-auto leading-relaxed">
-            Get the week's best sports moments and entertainment stories delivered to your inbox. No spam, ever.
+            Get the week&apos;s best sports moments and entertainment stories delivered to your inbox. No spam, ever.
           </p>
 
           {subscribed ? (
             <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-2xl text-base font-semibold">
               <span className="text-xl">🎉</span>
-              You're subscribed! Check your inbox.
+              You&apos;re subscribed! Check your inbox.
             </div>
           ) : (
             <form

@@ -70,7 +70,7 @@ export async function generateStaticParams() {
   try {
     const posts = await getAllBlogPosts({ preview: true });
     if (!Array.isArray(posts)) return [];
-    
+
     const authors = new Set();
     posts.forEach((post) => {
       const author = post.publishedBy || "Blynter Editorial Team";
@@ -87,9 +87,9 @@ export async function generateStaticParams() {
 export default async function AuthorProfile({ params }) {
   const { authorSlug } = await params;
   const info = getAuthorInfo(authorSlug);
-  
+
   const allPosts = await getAllBlogPosts({ preview: true }) || [];
-  
+
   // Filter posts belonging to this author
   const authorPosts = allPosts.filter((post) => {
     const postAuthor = post.publishedBy || "Blynter Editorial Team";
@@ -208,7 +208,7 @@ export default async function AuthorProfile({ params }) {
         {/* ── Content Grid ── */}
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            
+
             {/* Main author posts section */}
             <div className="lg:col-span-2 xl:col-span-3 space-y-6">
               <div className="section-header">
@@ -221,7 +221,7 @@ export default async function AuthorProfile({ params }) {
                 <div className="bg-white dark:bg-secondary-900 rounded-2xl p-12 text-center border border-secondary-100 dark:border-secondary-800">
                   <span className="text-4xl mb-4 block">📭</span>
                   <h2 className="text-lg font-bold text-secondary-950 dark:text-white mb-2">No Articles Found</h2>
-                  <p className="text-secondary-400 text-sm">This author hasn't published any articles yet.</p>
+                  <p className="text-secondary-400 text-sm">This author hasn&apos;t published any articles yet.</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">

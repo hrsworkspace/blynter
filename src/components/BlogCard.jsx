@@ -69,16 +69,16 @@ const formatBadgeLabel = (text) => {
 export default function BlogCard({ blog, variant = "default", priority = false }) {
   if (!blog) return null;
 
-  const title       = blog?.heroTitle || "";
-  const blogSlug    = blog?.slug || textToSlug(title);
-  const category    = Array.isArray(blog?.category)   ? blog.category[0]   : blog?.category   || "";
+  const title = blog?.heroTitle || "";
+  const blogSlug = blog?.slug || textToSlug(title);
+  const category = Array.isArray(blog?.category) ? blog.category[0] : blog?.category || "";
   const subCategory = Array.isArray(blog?.subCatgory) ? blog.subCatgory[0] : blog?.subCatgory || "";
-  const imageUrl    = blog?.heroImage?.url || "";
-  const author      = blog?.publishedBy || "Blynter Team";
-  const catSlug     = textToSlug(category);
-  const subCatSlug  = textToSlug(subCategory);
-  const href        = `/${catSlug}/${subCatSlug}/${blogSlug}`;
-  const colors      = getCategoryStyles(subCategory || category);
+  const imageUrl = blog?.heroImage?.url || "";
+  const author = blog?.publishedBy || "Blynter Team";
+  const catSlug = textToSlug(category);
+  const subCatSlug = textToSlug(subCategory);
+  const href = `/${catSlug}/${subCatSlug}/${blogSlug}`;
+  const colors = getCategoryStyles(subCategory || category);
 
   // Estimate reading time from rich text JSON
   const readingTime = estimateReadingTime(blog?.heroDescription?.json);
@@ -147,10 +147,10 @@ export default function BlogCard({ blog, variant = "default", priority = false }
                   <User size={13} />
                   <span className="font-medium text-white/90">{author}</span>
                 </span>
-                <span className="flex items-center gap-1.5">
+                {/* <span className="flex items-center gap-1.5">
                   <Clock size={13} />
                   {readingTime} min read
-                </span>
+                </span> */}
                 <span className="flex items-center gap-1.5 ml-auto">
                   Read story
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-200" />
@@ -186,7 +186,7 @@ export default function BlogCard({ blog, variant = "default", priority = false }
               {title}
             </h3>
             <div className="flex items-center gap-3 mt-1.5 text-xs text-secondary-400 dark:text-secondary-500">
-              <span className="flex items-center gap-1"><Clock size={11} /> {readingTime} min</span>
+              {/* <span className="flex items-center gap-1"><Clock size={11} /> {readingTime} min</span> */}
               <span className="flex items-center gap-1"><User size={11} /> {author}</span>
             </div>
           </div>
@@ -211,9 +211,9 @@ export default function BlogCard({ blog, variant = "default", priority = false }
             <h4 className="text-xs font-semibold text-secondary-800 dark:text-secondary-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2 leading-snug">
               {title}
             </h4>
-            <span className="text-xs text-secondary-400 mt-1 flex items-center gap-1">
+            {/* <span className="text-xs text-secondary-400 mt-1 flex items-center gap-1">
               <Clock size={10} /> {readingTime} min
-            </span>
+            </span> */}
           </div>
         </Link>
       </article>
@@ -252,10 +252,10 @@ export default function BlogCard({ blog, variant = "default", priority = false }
 
           {/* Reading time badge */}
           <div className="absolute bottom-3 right-3">
-            <span className="badge bg-black/50 text-white backdrop-blur-sm text-xs">
+            {/* <span className="badge bg-black/50 text-white backdrop-blur-sm text-xs">
               <Clock size={10} className="mr-1 inline" />
               {readingTime} min
-            </span>
+            </span> */}
           </div>
         </div>
 

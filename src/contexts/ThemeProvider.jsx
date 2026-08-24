@@ -1,20 +1,35 @@
 "use client";
-import { createContext, useContext, useEffect, useState, useRef } from "react";
+import { createContext, useContext, useEffect, useState, useRef, useLayoutEffect } from "react";
 
 const ThemeContext = createContext(undefined);
 
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 export function ThemeProvider({ children }) {
-  // Initialize theme from localStorage if available, otherwise default to 'light'
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("theme") || "light";
-    }
-    return "light";
-  });
+  const [theme, setTheme] = useState("light");
   const isMountedRef = useRef(false);
 
-  useEffect(() => {
-    isMountedRef.current = true;
+  // 1. On mount, read theme from localStorage and apply it
+  useIsomorphicLayoutEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+
+    const root = window.document.documentElement;
+    root.classList.remove("light", "dark");
+    if (savedTheme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      root.classList.add(systemTheme);
+    } else {
+      root.classList.add(savedTheme);
+    }
+  }, []);
+
+  // 2. When theme changes after mount, update root class and save to localStorage
+  useIsomorphicLayoutEffect(() => {
+    if (!isMountedRef.current) {
+      isMountedRef.current = true;
+      return;
+    }
 
     const root = window.document.documentElement;
     root.classList.remove("light", "dark");

@@ -176,7 +176,7 @@ export default function BlogDetailPage({ category, blogDetails, relatedArticles 
             Article Not Found
           </h1>
           <p className="text-secondary-500 dark:text-secondary-400 mb-8 leading-relaxed">
-            The article you're looking for doesn't exist or may have been moved.
+            The article you&apos;re looking for doesn&apos;t exist or may have been moved.
           </p>
           <Link href="/" className="btn-primary">
             <ArrowLeft size={16} />
