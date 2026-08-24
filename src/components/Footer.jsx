@@ -95,8 +95,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-sm text-secondary-400 leading-relaxed mb-5 max-w-xs">
-              Premium sports and entertainment editorial publication. Expert reporting on cricket, football, Bollywood, and Hollywood.
-            </p>
+              Personal finance publication delivering expert insights on budgeting, saving, investing, taxes, insurance, and wealth building.            </p>
 
             {/* Social links */}
             <div className="flex items-center gap-2.5">

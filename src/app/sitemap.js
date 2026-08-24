@@ -55,12 +55,8 @@ export default async function sitemap() {
   });
 
   // Default Categories & Subcategories mapped in app
-  const defaultCategories = ["sports", "entertainment", "finance"];
+  const defaultCategories = ["finance"];
   const defaultSubCategories = [
-    "sports/cricket",
-    "sports/football",
-    "entertainment/bollywood",
-    "entertainment/hollywood",
     "finance/personal-finance",
   ];
 

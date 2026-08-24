@@ -4,6 +4,7 @@ import { getBlogDetails } from "@/services/blogDetailServices";
 import { getAllBlogPosts, getBlogsBySubCatgory } from "@/services/blogServices";
 import { textToSlug } from "@/helper/helper";
 import Script from "next/script";
+import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 export const revalidate = false;
@@ -110,6 +111,9 @@ export default async function BlogDetails({ params, searchParams }) {
   const language = lng || "en-US";
 
   const blogDetails     = await getBlogDetailsData(blogDetail);
+  if (!blogDetails) {
+    notFound();
+  }
   const relatedArticles = await getBlogsBySubCatgory({
     category,
     subCatgory,

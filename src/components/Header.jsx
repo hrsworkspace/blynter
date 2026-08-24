@@ -13,15 +13,15 @@ import { getAllBlogPosts } from "@/services/blogServices";
 import { textToSlug } from "@/helper/helper";
 
 const NAV_CATEGORIES = [
-  {
-    name: "Sports",
-    icon: "🏆",
-    href: "/sports",
-    sub: [
-      { name: "Cricket", href: "/sports/cricket", icon: "🏏" },
-      // { name: "Football", href: "/sports/football", icon: "⚽" },
-    ],
-  },
+  // {
+  //   name: "Sports",
+  //   icon: "🏆",
+  //   href: "/sports",
+  //   sub: [
+  //     { name: "Cricket", href: "/sports/cricket", icon: "🏏" },
+  //     // { name: "Football", href: "/sports/football", icon: "⚽" },
+  //   ],
+  // },
   // {
   //   name: "Entertainment",
   //   icon: "🎬",

@@ -17,7 +17,7 @@ import { FLAGS, ADS_CONFIG } from "@/config/flags";
 const AdBlock = ({ slot, label = "Advertisement", className = "" }) => {
   useEffect(() => {
     if (!FLAGS.ENABLE_ADS) return;
-    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (_) {}
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (_) { }
   }, []);
 
   if (!FLAGS.ENABLE_ADS) return null;
@@ -64,15 +64,13 @@ const FAQSection = ({ faqs }) => {
               </span>
               <ChevronDown
                 size={18}
-                className={`text-secondary-400 flex-shrink-0 transition-transform duration-300 ${
-                  openIndex === index ? "rotate-180 text-primary-600" : ""
-                }`}
+                className={`text-secondary-400 flex-shrink-0 transition-transform duration-300 ${openIndex === index ? "rotate-180 text-primary-600" : ""
+                  }`}
               />
             </button>
             <div
-              className={`overflow-hidden transition-all duration-300 ${
-                openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-              }`}
+              className={`overflow-hidden transition-all duration-300 ${openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                }`}
             >
               <div className="px-6 pb-5 pt-1 text-secondary-600 dark:text-secondary-400 text-sm leading-relaxed border-t border-secondary-100 dark:border-secondary-700">
                 {faq.answer}
@@ -94,7 +92,7 @@ const ShareButtons = ({ title, url }) => {
       await navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (_) {}
+    } catch (_) { }
   };
 
   const shareLinks = [
@@ -141,11 +139,10 @@ const ShareButtons = ({ title, url }) => {
       ))}
       <button
         onClick={copyLink}
-        className={`flex items-center justify-center w-9 h-9 rounded-lg border transition-all duration-150 ${
-          copied
-            ? "border-green-500 bg-green-50 dark:bg-green-900/20 text-green-600"
-            : "border-secondary-200 dark:border-secondary-600 text-secondary-500 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-700"
-        }`}
+        className={`flex items-center justify-center w-9 h-9 rounded-lg border transition-all duration-150 ${copied
+          ? "border-green-500 bg-green-50 dark:bg-green-900/20 text-green-600"
+          : "border-secondary-200 dark:border-secondary-600 text-secondary-500 dark:text-secondary-400 hover:bg-secondary-100 dark:hover:bg-secondary-700"
+          }`}
         aria-label={copied ? "Link copied!" : "Copy link"}
       >
         {copied ? <Check size={16} /> : <LinkIcon size={16} />}
@@ -188,23 +185,23 @@ export default function BlogDetailPage({ category, blogDetails, relatedArticles 
     );
   }
 
-  const imageUrl      = blogDetails?.heroImage?.url || "";
-  const title         = blogDetails?.heroTitle || "";
-  const author        = blogDetails?.publishedBy || "Blynter Team";
-  const richTextJson  = blogDetails?.heroDescription?.json || {};
+  const imageUrl = blogDetails?.heroImage?.url || "";
+  const title = blogDetails?.heroTitle || "";
+  const author = blogDetails?.publishedBy || "Blynter Team";
+  const richTextJson = blogDetails?.heroDescription?.json || {};
   const richTextLinks = blogDetails?.heroDescription?.links || [];
-  const subCategory   = Array.isArray(blogDetails?.subCatgory) ? blogDetails.subCatgory[0] : blogDetails?.subCatgory || "";
-  const blogCategory  = Array.isArray(blogDetails?.category)   ? blogDetails.category[0]   : blogDetails?.category || category || "";
-  const colors        = getCategoryColor(subCategory || blogCategory);
-  const readingTime   = estimateReadingTime(richTextJson);
-  const catSlug       = textToSlug(blogCategory);
-  const subCatSlug    = textToSlug(subCategory);
+  const subCategory = Array.isArray(blogDetails?.subCatgory) ? blogDetails.subCatgory[0] : blogDetails?.subCatgory || "";
+  const blogCategory = Array.isArray(blogDetails?.category) ? blogDetails.category[0] : blogDetails?.category || category || "";
+  const colors = getCategoryColor(subCategory || blogCategory);
+  const readingTime = estimateReadingTime(richTextJson);
+  const catSlug = textToSlug(blogCategory);
+  const subCatSlug = textToSlug(subCategory);
 
   const breadcrumbs = [
-    { name: "Home",        href: "/" },
-    { name: blogCategory,  href: `/${catSlug}` },
-    { name: subCategory,   href: `/${catSlug}/${subCatSlug}` },
-    { name: title,         href: null },
+    { name: "Home", href: "/" },
+    { name: blogCategory, href: `/${catSlug}` },
+    { name: subCategory, href: `/${catSlug}/${subCatSlug}` },
+    { name: title, href: null },
   ].filter((b) => b.name);
 
   return (
@@ -397,8 +394,7 @@ export default function BlogDetailPage({ category, blogDetails, relatedArticles 
                       </Link>
                     </h3>
                     <p className="text-sm text-secondary-500 dark:text-secondary-400 leading-relaxed">
-                      Editorial contributor at Blynter. Passionate about sports, cinema, and storytelling that connects fans with the stories they love.
-                    </p>
+                      Editorial contributor at Blynter. Passionate about personal finance, investing, budgeting, and creating practical money guides that help readers make smarter financial decisions.                    </p>
                   </div>
                 </div>
               </div>

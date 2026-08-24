@@ -7,19 +7,47 @@ export const revalidate = false;
 
 export const metadata = {
   title: {
-    absolute: "Blynter | Sports Stories and Personal Finance",
+    absolute: "Blynter | Personal Finance",
   },
+
   description:
-    "From thrilling sports moments to personal finance, Blynter covers stories that entertain and excite true fans. Expert analysis, breaking news, and in-depth coverage.",
+    "Discover expert personal finance guides on budgeting, saving, investing, taxes, insurance, loans, and smart money management to help you achieve your financial goals.",
+
+  keywords: [
+    "personal finance",
+    "money management",
+    "budgeting",
+    "saving money",
+    "investing",
+    "financial planning",
+    "credit cards",
+    "loans",
+    "insurance",
+    "tax planning",
+    "mutual funds",
+    "stock market",
+    "wealth building",
+    "passive income",
+    "retirement planning",
+  ],
+
   alternates: {
     canonical: process.env.NEXT_PUBLIC_BASE_URL || "https://www.blynter.com",
   },
+
   openGraph: {
-    title: "Blynter | Sports Stories, Personal Finance",
+    title: "Blynter | Personal Finance Guides & Money Tips",
     description:
-      "From thrilling sports moments to personal finance, Blynter covers stories that entertain and excite true fans. Expert analysis, breaking news, and in-depth coverage.",
+      "Discover expert personal finance guides on budgeting, saving, investing, taxes, insurance, loans, and smart money management.",
     url: process.env.NEXT_PUBLIC_BASE_URL || "https://www.blynter.com",
     type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Blynter | Personal Finance Guides & Money Tips",
+    description:
+      "Learn budgeting, investing, saving, taxes, insurance, and other practical personal finance strategies.",
   },
 };
 

@@ -59,7 +59,7 @@ export async function generateStaticParams() {
   try {
     const posts = await getAllBlogPosts({ preview: true });
     if (!Array.isArray(posts)) return [];
-    
+
     const paths = [];
     posts.forEach((post) => {
       const cat = Array.isArray(post.category) ? post.category[0] : post.category;
@@ -83,9 +83,9 @@ export default async function SubCategoryHub({ params }) {
   const { category, subCatgory } = await params;
   const info = getSubCategoryInfo(subCatgory);
   const parentName = category.charAt(0).toUpperCase() + category.slice(1);
-  
+
   const allPosts = await getAllBlogPosts({ preview: true }) || [];
-  
+
   // Filter posts belonging to this subcategory
   const subCategoryPosts = allPosts.filter((post) => {
     const sub = Array.isArray(post.subCatgory) ? post.subCatgory[0] : post.subCatgory;
@@ -168,7 +168,7 @@ export default async function SubCategoryHub({ params }) {
         {/* ── Content Grid ── */}
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            
+
             {/* Main posts section */}
             <div className="lg:col-span-2 xl:col-span-3 space-y-8">
               {subCategoryPosts.length === 0 ? (

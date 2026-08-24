@@ -43,7 +43,7 @@ export default function ArticleSidebar({ popularPosts = [], richTextJson }) {
             Get the best stories in your inbox
           </h3>
           <p className="text-primary-200 text-xs mb-4 leading-relaxed">
-            Weekly digest of top sports and entertainment stories. No spam.
+            Weekly digest of the top personal finance tips, investing insights, and money-saving strategies. No spam.
           </p>
           {subscribed ? (
             <div className="bg-white/20 rounded-xl p-3 text-center">

@@ -69,7 +69,7 @@ export const ADS_CONFIG = {
 // ── Site Info ─────────────────────────────────────────────────
 export const SITE = {
   NAME: "Blynter",
-  TAGLINE: "Sports Stories, Movie Reviews & Entertainment",
+  TAGLINE: "Personal Finance Guides, Investing & Money Tips",
   BASE_URL: process.env.NEXT_PUBLIC_BASE_URL || "https://blynter.com",
   TWITTER: "@blynter",
   PUBLISHER_ID: ADS_CONFIG.PUBLISHER_ID,
@@ -77,7 +77,7 @@ export const SITE = {
 
 // ── Categories ────────────────────────────────────────────────
 export const CATEGORIES = [
-  { name: "Cricket", href: "/sports/cricket", emoji: "🏏", count: "48" },
+  // { name: "Cricket", href: "/sports/cricket", emoji: "🏏", count: "48" },
   { name: "Finanace", href: "/finance", emoji: "⚽", count: "36" },
   // { name: "Bollywood", href: "/entertainment/bollywood", emoji: "🎭", count: "52" },
   // { name: "Hollywood", href: "/entertainment/hollywood", emoji: "⭐", count: "44" },

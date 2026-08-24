@@ -23,7 +23,7 @@ const CardSkeleton = () => (
 
 /* ─── Featured Categories ───────────────────────────── */
 const FEATURED_CATEGORIES = [
-  { name: "Cricket", emoji: "🏏", href: "/sports/cricket", desc: "Live scores, analysis & more", color: "from-green-500 to-emerald-600", count: "48 Articles" },
+  // { name: "Cricket", emoji: "🏏", href: "/sports/cricket", desc: "Live scores, analysis & more", color: "from-green-500 to-emerald-600", count: "48 Articles" },
   { name: "Finance", emoji: "⚽", href: "/finance", desc: "Transfers, results & standings", color: "from-blue-500 to-blue-700", count: "36 Articles" },
 ];
 
@@ -338,8 +338,7 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
             Stay ahead of the game
           </h2>
           <p className="text-white/80 text-base sm:text-lg mb-8 max-w-xl mx-auto leading-relaxed">
-            Get the week&apos;s best sports moments and entertainment stories delivered to your inbox. No spam, ever.
-          </p>
+            Get the week's best personal finance tips, investing insights, and money-saving strategies delivered straight to your inbox. No spam, ever.          </p>
 
           {subscribed ? (
             <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-2xl text-base font-semibold">

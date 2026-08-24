@@ -17,20 +17,27 @@ const slugify = (val) => textToSlug(String(val || ""));
 const AUTHOR_PROFILES = {
   "blynter-editorial-team": {
     name: "Blynter Editorial Team",
-    role: "Senior Editors & Contributors",
-    bio: "Our team of dedicated sports journalists, movie critics, and entertainment analysts brings you verified, fact-checked reporting and reviews. Collectively spanning 25+ years in media, we strive to bring true fans the stories that shape the conversation.",
+    role: "Finance Editors & Contributors",
+    bio: "Our editorial team creates well-researched, fact-checked content on personal finance, investing, budgeting, saving, taxes, insurance, and money management. We are committed to providing accurate, practical, and easy-to-understand financial guidance to help readers make informed decisions.",
     avatarText: "BE",
-    social: { email: "editorial@blynter.com", website: "https://blynter.com" },
-    credentials: "Fact-Checked & Verified Team"
+    social: {
+      email: "editorial@blynter.com",
+      website: "https://blynter.com",
+    },
+    credentials: "Fact-Checked & Editorially Reviewed",
   },
-  "admin": {
+
+  admin: {
     name: "Blynter Editorial Team",
-    role: "Senior Editors & Contributors",
-    bio: "Our team of dedicated sports journalists, movie critics, and entertainment analysts brings you verified, fact-checked reporting and reviews. Collectively spanning 25+ years in media, we strive to bring true fans the stories that shape the conversation.",
+    role: "Finance Editors & Contributors",
+    bio: "Our editorial team creates well-researched, fact-checked content on personal finance, investing, budgeting, saving, taxes, insurance, and money management. We are committed to providing accurate, practical, and easy-to-understand financial guidance to help readers make informed decisions.",
     avatarText: "BE",
-    social: { email: "editorial@blynter.com", website: "https://blynter.com" },
-    credentials: "Fact-Checked & Verified Team"
-  }
+    social: {
+      email: "editorial@blynter.com",
+      website: "https://blynter.com",
+    },
+    credentials: "Fact-Checked & Editorially Reviewed",
+  },
 };
 
 function getAuthorInfo(slug) {

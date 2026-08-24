@@ -30,30 +30,40 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: {
-    default: "Blynter | Sports Stories, Movie Reviews & Entertainment",
+    default: "Blynter | Personal Finance",
     template: "%s | Blynter",
   },
   description:
-    "From thrilling sports moments to honest movie reviews, Blynter covers stories that entertain and excite true fans. Expert analysis, breaking news, and in-depth coverage.",
+    "Learn personal finance with practical guides on saving, investing, budgeting, credit cards, loans, taxes, insurance, and wealth-building strategies.",
+
   keywords: [
-    "sports stories",
-    "movie reviews",
-    "entertainment news",
-    "sports analysis",
-    "film critiques",
-    "celebrity gossip",
-    "sports highlights",
-    "box office updates",
-    "TV show recaps",
-    "pop culture trends",
-    "cricket",
-    "football",
-    "bollywood",
-    "hollywood",
+    "personal finance",
+    "money management",
+    "budgeting",
+    "saving money",
+    "investing",
+    "financial planning",
+    "credit cards",
+    "loans",
+    "insurance",
+    "tax planning",
+    "mutual funds",
+    "stock market",
+    "wealth building",
+    "passive income",
+    "retirement planning",
   ],
-  authors: [{ name: "Blynter Editorial Team", url: "https://blynter.com" }],
+
+  authors: [
+    {
+      name: "Blynter Editorial Team",
+      url: "https://blynter.com",
+    },
+  ],
+
   creator: "Blynter",
   publisher: "Blynter",
+
   robots: {
     index: true,
     follow: true,
@@ -67,27 +77,31 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
+
   alternates: {
-    canonical: `${process.env.NEXT_PUBLIC_BASE_URL}`,
+    canonical: process.env.NEXT_PUBLIC_BASE_URL,
   },
+
   openGraph: {
     type: "website",
     locale: "en_US",
     url: process.env.NEXT_PUBLIC_BASE_URL,
     siteName: "Blynter",
-    title: "Blynter | Sports Stories, Movie Reviews & Entertainment",
+    title: "Blynter | Personal Finance Guides & Money Tips",
     description:
-      "Expert sports coverage, movie reviews, and entertainment news from Blynter's editorial team.",
+      "Explore expert personal finance guides covering budgeting, investing, saving, taxes, insurance, loans, and smart money management.",
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Blynter | Sports Stories, Movie Reviews & Entertainment",
+    title: "Blynter | Personal Finance Guides & Money Tips",
     description:
-      "Expert sports coverage, movie reviews, and entertainment news from Blynter.",
+      "Practical personal finance advice on budgeting, investing, saving, taxes, insurance, and wealth creation.",
     creator: "@blynter",
     site: "@blynter",
   },
-  category: "sports entertainment",
+
+  category: "Finance",
 };
 
 export default function RootLayout({ children }) {
@@ -98,7 +112,7 @@ export default function RootLayout({ children }) {
     url: process.env.NEXT_PUBLIC_BASE_URL || "https://blynter.com",
     logo: `${process.env.NEXT_PUBLIC_BASE_URL || "https://blynter.com"}/favicon.ico`,
     description:
-      "Premium sports and entertainment editorial publication covering cricket, football, Bollywood, and Hollywood.",
+      "Premium Personal Finance editorial publication covering cricket, football, Bollywood, and Hollywood.",
     sameAs: [
       "https://www.facebook.com/blynter",
       "https://www.twitter.com/blynter",

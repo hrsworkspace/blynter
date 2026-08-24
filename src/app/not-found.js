@@ -1,11 +1,7 @@
-import React from 'react'
-import Page404 from '@/components/404/Page404';
-
+import { redirect } from 'next/navigation';
 
 const notFound = () => {
-  return (
-    <Page404 />
-  )
-}
+  redirect('/');
+};
 
-export default notFound
+export default notFound;

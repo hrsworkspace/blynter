@@ -17,8 +17,9 @@ const slugify = (val) => textToSlug(String(val || ""));
 
 // Map categories to user-friendly titles and emojis
 const CATEGORY_META = {
-  sports: { name: "Sports", emoji: "🏆", desc: "Expert coverage, game analysis, breaking news, and in-depth player stories from cricket, football, and more." },
-  entertainment: { name: "Entertainment", emoji: "🎬", desc: "Fresh movie reviews, Box Office collections, celebrity updates, and TV show critiques from Bollywood and Hollywood." },
+  // sports: { name: "Sports", emoji: "🏆", desc: "Expert coverage, game analysis, breaking news, and in-depth player stories from cricket, football, and more." },
+  // entertainment: { name: "Entertainment", emoji: "🎬", desc: "Fresh movie reviews, Box Office collections, celebrity updates, and TV show critiques from Bollywood and Hollywood." },
+  finance: { name: "Finance", emoji: "💰", desc: "Personal finance is the management of your money including saving, investing, and budgeting. Learn personal finance topics like retirement planning, wealth building, and money management strategies." }
 };
 
 function getCategoryInfo(catSlug) {
@@ -58,7 +59,7 @@ export async function generateStaticParams() {
   try {
     const posts = await getAllBlogPosts({ preview: true });
     if (!Array.isArray(posts)) return [];
-    
+
     const categories = new Set();
     posts.forEach((post) => {
       const cat = Array.isArray(post.category) ? post.category[0] : post.category;
@@ -75,9 +76,9 @@ export async function generateStaticParams() {
 export default async function CategoryHub({ params }) {
   const { category } = await params;
   const info = getCategoryInfo(category);
-  
+
   const allPosts = await getAllBlogPosts({ preview: true }) || [];
-  
+
   // Filter posts belonging to this category
   const categoryPosts = allPosts.filter((post) => {
     const cat = Array.isArray(post.category) ? post.category[0] : post.category;
@@ -153,7 +154,7 @@ export default async function CategoryHub({ params }) {
         {/* ── Content Grid ── */}
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            
+
             {/* Main posts section */}
             <div className="lg:col-span-2 xl:col-span-3 space-y-8">
               {categoryPosts.length === 0 ? (
