@@ -406,7 +406,7 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
       {/* ═══════════════════════════════════════════════
           SECTION 7: TRUST BAR
       ════════════════════════════════════════════════ */}
-      <section className="bg-secondary-50 dark:bg-secondary-950 border-t border-secondary-200 dark:border-secondary-800 py-6" aria-label="Trust signals">
+      <section className="bg-secondary-50 dark:bg-secondary-950 border-t border-b border-secondary-200 dark:border-secondary-800 py-6" aria-label="Trust signals">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-secondary-400 dark:text-secondary-500 font-medium">
             {[

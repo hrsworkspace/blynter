@@ -111,6 +111,7 @@ export default async function BlogDetails({ params, searchParams }) {
 
   const blogDetails     = await getBlogDetailsData(blogDetail);
   const relatedArticles = await getBlogsBySubCatgory({
+    category,
     subCatgory,
     excludeSlug: blogDetail,
     limit: 6,

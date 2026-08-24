@@ -58,10 +58,7 @@ const safe = (arr) => (Array.isArray(arr) ? arr : []);
 export default function Header() {
   const pathname = usePathname();
 
-  // If in admin dashboard, do not render public header
-  if (pathname?.startsWith("/admin")) {
-    return null;
-  }
+
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -157,6 +154,11 @@ export default function Header() {
     }
   };
 
+  // If in admin dashboard, do not render public header
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <>
       {/* Reading Progress Bar */}
@@ -169,8 +171,8 @@ export default function Header() {
       <header
         ref={headerRef}
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled
-          ? "bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md shadow-nav border-b border-secondary-100 dark:border-secondary-800"
-          : "bg-white dark:bg-secondary-900 border-b border-transparent"
+          ? "bg-white/95 dark:bg-secondary-900/95 backdrop-blur-md shadow-nav border-b border-secondary-200 dark:border-secondary-200"
+          : "bg-white dark:bg-secondary-900 border-b border-secondary-200"
           }`}
       >
         {/* ── Top bar ── */}

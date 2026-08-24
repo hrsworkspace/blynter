@@ -183,7 +183,7 @@ export default function RootLayout({ children }) {
         className={`${inter.variable} ${plusJakartaSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen bg-surface-light dark:bg-surface-dark text-secondary-900 dark:text-secondary-100`}
       >
         <ThemeProvider>
-          {/* <NavigationScrollToTop /> */}
+          <NavigationScrollToTop />
           <div className="flex flex-col min-h-screen">
             <Header />
             <div className="flex-grow">{children}</div>

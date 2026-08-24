@@ -162,6 +162,7 @@ export default function BlogDetailPage({ category, blogDetails, relatedArticles 
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.scrollTo(0, 0);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUrlPath(window.location.href);
     }
   }, [blogDetails?.slug]);

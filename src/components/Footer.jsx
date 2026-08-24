@@ -62,11 +62,6 @@ const SOCIAL = [
 export default function Footer() {
   const pathname = usePathname();
 
-  // If in admin dashboard, do not render public footer
-  if (pathname?.startsWith("/admin")) {
-    return null;
-  }
-
   const currentYear = new Date().getFullYear();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -75,6 +70,11 @@ export default function Footer() {
     e.preventDefault();
     if (email.trim()) setSubscribed(true);
   };
+
+  // If in admin dashboard, do not render public footer
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <footer className="bg-secondary-900 dark:bg-secondary-950 text-secondary-300">

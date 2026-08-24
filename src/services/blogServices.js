@@ -59,7 +59,7 @@ export async function getAllBlogPosts({ preview = true, lng = "en-US" }) {
     return entriesData?.data?.blynterTopTrendingCollection?.items;
   }
 
-export async function getBlogsBySubCatgory({ subCatgory, excludeSlug, limit = 3, preview = true, lng = "en-US" }) {
+export async function getBlogsBySubCatgory({ category, subCatgory, excludeSlug, limit = 3, preview = true, lng = "en-US" }) {
     try {
       const allBlogs = await getAllBlogPosts({ preview, lng });
       if (!Array.isArray(allBlogs)) return [];
@@ -77,17 +77,28 @@ export async function getBlogsBySubCatgory({ subCatgory, excludeSlug, limit = 3,
       };
 
       const normalizedExcludeSlug = excludeSlug ? normalizeSlug(excludeSlug) : null;
+      const normalizedCategory = category ? normalizeSlug(category) : null;
 
-      // Random 3 blogs from the whole collection.
-      // "subCatgory" is intentionally ignored (no category/subcategory filtering).
-      const nonCurrentBlogs = normalizedExcludeSlug
+      // Filter out the current blog first.
+      let filteredBlogs = normalizedExcludeSlug
         ? allBlogs.filter((blog) => {
             const blogSlug = blog?.slug || textToSlug(blog?.heroTitle || "");
             return normalizeSlug(blogSlug) !== normalizedExcludeSlug;
           })
         : allBlogs;
 
-      const shuffled = shuffleArray(nonCurrentBlogs);
+      // Filter by category if category parameter matches "finance" or is provided.
+      if (normalizedCategory) {
+        const categoryFiltered = filteredBlogs.filter((blog) => {
+          const blogCat = Array.isArray(blog?.category) ? blog.category[0] : blog?.category;
+          return normalizeSlug(blogCat) === normalizedCategory;
+        });
+        if (categoryFiltered.length > 0) {
+          filteredBlogs = categoryFiltered;
+        }
+      }
+
+      const shuffled = shuffleArray(filteredBlogs);
       return shuffled.slice(0, limit);
     } catch (err) {
       console.error("Error fetching blogs by category:", err);
