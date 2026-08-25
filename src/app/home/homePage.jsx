@@ -80,7 +80,7 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
   const heroPost = trending[0] || posts[0];
   const heroSecondary = trending.slice(1, 3);
   const trendingList = trending.slice(0, 6);
-  const latestPosts = posts.slice(0, visibleCount);
+  const latestPosts = posts.slice(3, visibleCount);
   const popularPosts = posts.slice(0, 5);
 
   return (
@@ -338,7 +338,7 @@ export default function HomePage({ blogPosts = [], tredingBlogs = [] }) {
             Stay ahead of the game
           </h2>
           <p className="text-white/80 text-base sm:text-lg mb-8 max-w-xl mx-auto leading-relaxed">
-            Get the week's best personal finance tips, investing insights, and money-saving strategies delivered straight to your inbox. No spam, ever.          </p>
+            Get the  best personal finance tips, investing insights, and money-saving strategies delivered straight to your inbox. No spam, ever.          </p>
 
           {subscribed ? (
             <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-2xl text-base font-semibold">
