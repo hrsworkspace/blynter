@@ -261,10 +261,10 @@ export default function BlogDetailPage({ category, blogDetails, relatedArticles 
                   </div>
                   <span className="font-semibold text-white group-hover:underline">{author}</span>
                 </Link>
-                <span className="flex items-center gap-1.5">
+                {/* <span className="flex items-center gap-1.5">
                   <Clock size={13} />
                   {readingTime} min read
-                </span>
+                </span> */}
               </div>
             </div>
           </div>

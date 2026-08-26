@@ -10,9 +10,9 @@ const NewsCarousel = ({
   autoSlideInterval = 6000,
   transitionDuration = 600,
 }) => {
-  const [currentIndex,   setCurrentIndex]   = useState(0);
-  const [isPaused,       setIsPaused]       = useState(false);
-  const [isTransitioning,setIsTransitioning]= useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const intervalRef = useRef(null);
 
   const carouselPosts = tredingBlogs?.slice(0, 6) || [];
@@ -38,17 +38,17 @@ const NewsCarousel = ({
 
   if (total === 0) return null;
 
-  const post   = carouselPosts[currentIndex];
-  const title  = post?.heroTitle || "";
-  const slug   = post?.slug || textToSlug(title);
-  const cat    = Array.isArray(post?.category)   ? post.category[0]   : post?.category   || "";
+  const post = carouselPosts[currentIndex];
+  const title = post?.heroTitle || "";
+  const slug = post?.slug || textToSlug(title);
+  const cat = Array.isArray(post?.category) ? post.category[0] : post?.category || "";
   const subCat = Array.isArray(post?.subCatgory) ? post.subCatgory[0] : post?.subCatgory || "";
-  const img    = post?.heroImage?.url || "";
-  const catSlug    = textToSlug(cat);
+  const img = post?.heroImage?.url || "";
+  const catSlug = textToSlug(cat);
   const subCatSlug = textToSlug(subCat);
-  const href       = `/${catSlug}/${subCatSlug}/${slug}`;
-  const colors     = getCategoryColor(subCat || cat);
-  const readTime   = estimateReadingTime(post?.heroDescription?.json);
+  const href = `/${catSlug}/${subCatSlug}/${slug}`;
+  const colors = getCategoryColor(subCat || cat);
+  const readTime = estimateReadingTime(post?.heroDescription?.json);
 
   const getDesc = (blog) => {
     try {
@@ -78,9 +78,8 @@ const NewsCarousel = ({
             alt={title}
             fill
             priority={currentIndex === 0}
-            className={`object-cover transition-all duration-700 ${
-              isTransitioning ? "scale-105 opacity-0" : "scale-100 opacity-100"
-            }`}
+            className={`object-cover transition-all duration-700 ${isTransitioning ? "scale-105 opacity-0" : "scale-100 opacity-100"
+              }`}
             sizes="(max-width: 1024px) 100vw, 70vw"
           />
         )}
@@ -91,9 +90,8 @@ const NewsCarousel = ({
         {/* ── Content ── */}
         <Link href={href} className="absolute inset-0 flex flex-col justify-end p-5 sm:p-8 lg:p-10" tabIndex={-1}>
           <div
-            className={`transition-all duration-500 ${
-              isTransitioning ? "opacity-0 translate-y-3" : "opacity-100 translate-y-0"
-            }`}
+            className={`transition-all duration-500 ${isTransitioning ? "opacity-0 translate-y-3" : "opacity-100 translate-y-0"
+              }`}
           >
             {/* Badges */}
             <div className="flex items-center gap-2 mb-3">
@@ -120,11 +118,11 @@ const NewsCarousel = ({
             {/* Meta */}
             <div className="flex items-center gap-4 text-white/65 text-xs sm:text-sm">
               <span className="font-semibold text-white/90">{post?.publishedBy || "Blynter"}</span>
-              <span>·</span>
+              {/* <span>·</span>
               <span className="flex items-center gap-1">
                 <Clock size={12} />
                 {readTime} min read
-              </span>
+              </span> */}
               <span className="ml-auto flex items-center gap-1 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full text-white text-xs font-semibold hover:bg-white/30 transition-colors">
                 Read story →
               </span>
@@ -177,11 +175,10 @@ const NewsCarousel = ({
                 setIsPaused(true);
                 setTimeout(() => setIsPaused(false), 4000);
               }}
-              className={`rounded-full transition-all duration-300 ${
-                i === currentIndex
-                  ? "bg-white w-6 h-2"
-                  : "bg-white/40 hover:bg-white/60 w-2 h-2"
-              }`}
+              className={`rounded-full transition-all duration-300 ${i === currentIndex
+                ? "bg-white w-6 h-2"
+                : "bg-white/40 hover:bg-white/60 w-2 h-2"
+                }`}
               aria-label={`Go to slide ${i + 1}`}
               aria-current={i === currentIndex ? "true" : undefined}
             />
@@ -193,12 +190,12 @@ const NewsCarousel = ({
       {total > 1 && (
         <div className="hidden lg:grid grid-cols-3 border-t border-secondary-700/50">
           {carouselPosts.slice(0, 3).map((p, i) => {
-            const t    = p?.heroTitle || "";
-            const s    = p?.slug || textToSlug(t);
-            const pCat = Array.isArray(p?.category)   ? p.category[0]   : p?.category   || "";
+            const t = p?.heroTitle || "";
+            const s = p?.slug || textToSlug(t);
+            const pCat = Array.isArray(p?.category) ? p.category[0] : p?.category || "";
             const pSub = Array.isArray(p?.subCatgory) ? p.subCatgory[0] : p?.subCatgory || "";
             const pImg = p?.heroImage?.url || "";
-            const h    = `/${textToSlug(pCat)}/${textToSlug(pSub)}/${s}`;
+            const h = `/${textToSlug(pCat)}/${textToSlug(pSub)}/${s}`;
             const active = i === currentIndex;
 
             return (
@@ -212,11 +209,10 @@ const NewsCarousel = ({
                   setIsPaused(true);
                   setTimeout(() => setIsPaused(false), 4000);
                 }}
-                className={`relative flex items-center gap-3 p-3 text-left transition-all duration-150 border-r last:border-r-0 border-secondary-700/50 ${
-                  active
-                    ? "bg-secondary-800"
-                    : "bg-secondary-900 hover:bg-secondary-800"
-                }`}
+                className={`relative flex items-center gap-3 p-3 text-left transition-all duration-150 border-r last:border-r-0 border-secondary-700/50 ${active
+                  ? "bg-secondary-800"
+                  : "bg-secondary-900 hover:bg-secondary-800"
+                  }`}
               >
                 {pImg && (
                   <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
@@ -224,9 +220,8 @@ const NewsCarousel = ({
                   </div>
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className={`text-xs font-semibold line-clamp-2 leading-snug transition-colors ${
-                    active ? "text-white" : "text-secondary-400 hover:text-secondary-200"
-                  }`}>
+                  <p className={`text-xs font-semibold line-clamp-2 leading-snug transition-colors ${active ? "text-white" : "text-secondary-400 hover:text-secondary-200"
+                    }`}>
                     {t}
                   </p>
                   {active && (
